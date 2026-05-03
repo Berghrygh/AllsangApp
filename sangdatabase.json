@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "songs": [
+    {
+      "id": "id-eksempel1",
+      "artist": "Tradisjonell",
+      "title": "Pål sine høner",
+      "lyrics": "  G              D7        G\nPål sine høner på haugen utslapp\n              D7              G\nhaukene gjorde pålhønom et happ\n   G        D7        G\npål kunne tå det så ille,\n   D7              G\npål kunne tå det så ille!\n\nKlukk klukk klukk sa høna på haugen\nklukk klukk klukk sa høna på haugen\nfår je itte sleppe ut hanen min\nfår je itte sleppe ut hanen min\n",
+      "hasChords": true,
+      "createdAt": "2026-05-03",
+      "updatedAt": "2026-05-03"
+    },
+    {
+      "id": "id-eksempel2",
+      "artist": "Bjørn Eidsvåg",
+      "title": "Eg ser",
+      "lyrics": "(Erstatt denne teksten med ekte sangtekst – dette er bare et eksempel for å vise oppsettet.)\n\nEg ser at du er trøtt,\nmen eg kan ikkje gå alle skrittå for deg.\nDu må gå dei sjøl,\nmen eg vil gå dei med deg.\nEg vil gå dei med deg.\n",
+      "hasChords": false,
+      "createdAt": "2026-05-03",
+      "updatedAt": "2026-05-03"
+    }
+  ],
+  "setlists": [
+    {
+      "id": "id-eksempel-setlist",
+      "name": "Eksempel: Hageparty 2026",
+      "description": "Allsang i hagen – demo",
+      "songIds": ["id-eksempel1", "id-eksempel2"],
+      "createdAt": "2026-05-03"
+    }
+  ]
+}
