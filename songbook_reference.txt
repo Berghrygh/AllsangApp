@@ -1,0 +1,402 @@
+SONGBOOK REFERENCE
+==================
+For each song: songwriter(s), year, album/origin, a short note,
+and links to licensed lyrics sites (Genius and AZLyrics) where you
+can read the full lyrics.
+
+Note on links: Genius search URLs are used when a direct page link
+isn't certain — click the top result. AZLyrics links follow the
+site's standard artist/song slug pattern; if a link 404s, use the
+Genius search link instead.
+
+
+1) Ben Caplan — "Southbound"
+   Songwriter: Ben Caplan
+   Year: 2011 · Album: In the Time of the Great Remembering
+   About: Brooding folk-blues with Caplan's gravelly delivery; a
+   restless travelling song built on a stomping minor-key groove.
+   Genius:   https://genius.com/search?q=Ben+Caplan+Southbound
+   AZLyrics: https://www.azlyrics.com/lyrics/bencaplan/southbound.html
+
+2) Ben Caplan — "Down to the River"
+   Songwriter: Ben Caplan
+   Year: 2011 · Album: In the Time of the Great Remembering
+   About: A klezmer-tinged folk anthem, often used as a singalong
+   closer at his shows.
+   Genius:   https://genius.com/search?q=Ben+Caplan+Down+to+the+River
+   AZLyrics: https://www.azlyrics.com/lyrics/bencaplan/downtotheriver.html
+
+3) Michael Jackson — "Billie Jean"  (note: "Billie", not "Billy")
+   Songwriter: Michael Jackson
+   Year: 1982 · Album: Thriller
+   About: Iconic post-disco/funk track about a woman falsely
+   claiming MJ fathered her child; defined the Thriller era.
+   Genius:   https://genius.com/Michael-jackson-billie-jean-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/michaeljackson/billiejean.html
+
+4) Neil Young — "Old Man"
+   Songwriter: Neil Young
+   Year: 1972 · Album: Harvest
+   About: Written about the caretaker of Young's Broken Arrow
+   Ranch; a young man recognising himself in an older one.
+   Genius:   https://genius.com/Neil-young-old-man-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/neilyoung/oldman.html
+
+5) Neil Young — "Harvest Moon"
+   Songwriter: Neil Young
+   Year: 1992 · Album: Harvest Moon
+   About: A tender late-career love song to his then-wife Pegi;
+   the title track of the long-awaited Harvest follow-up.
+   Genius:   https://genius.com/Neil-young-harvest-moon-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/neilyoung/harvestmoon.html
+
+6) Neil Young — "My My, Hey Hey (Out of the Blue)"
+   Songwriters: Neil Young, Jeff Blackburn (with Crazy Horse)
+   Year: 1979 · Album: Rust Never Sleeps
+   About: Acoustic bookend to the album (its electric twin is
+   "Hey Hey, My My"); famously quoted in Kurt Cobain's note.
+   Genius:   https://genius.com/Neil-young-my-my-hey-hey-out-of-the-blue-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/neilyoung/mymyheyheyoutoftheblue.html
+
+7) Eric Clapton — "Layla"
+   Songwriters: Eric Clapton, Jim Gordon
+   Year: 1970 (Derek and the Dominos) · Album: Layla and Other
+   Assorted Love Songs. Famous unplugged version: 1992.
+   About: Written for Pattie Boyd (then George Harrison's wife);
+   the long piano coda was contributed by Jim Gordon.
+   Genius:   https://genius.com/Derek-and-the-dominos-layla-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/ericclapton/layla.html
+
+8) Stevie Wonder — "Superstition"
+   Songwriter: Stevie Wonder
+   Year: 1972 · Album: Talking Book
+   About: Clavinet-driven funk classic warning against
+   superstitious thinking; a US #1 single.
+   Genius:   https://genius.com/Stevie-wonder-superstition-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/steviewonder/superstition.html
+
+9) James Brown — "I Got You (I Feel Good)"
+   Songwriter: James Brown
+   Year: 1965 · Single (later on the album of the same name)
+   About: Brown's signature shout-and-horn-stab anthem; one of
+   the foundational records of funk.
+   Genius:   https://genius.com/James-brown-i-got-you-i-feel-good-lyrics
+   AZLyrics: https://www.azlyrics.com/lyrics/jamesbrown/igotyouifeelgood.html
+
+10) The Beatles — "Let It Be"
+    Songwriters: Lennon–McCartney (written by Paul McCartney)
+    Year: 1970 · Album: Let It Be
+    About: Inspired by a dream McCartney had of his late mother
+    Mary; the title-track hymn of the band's final album.
+    Genius:   https://genius.com/The-beatles-let-it-be-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/beatles/letitbe.html
+
+11) Eric Clapton — "Wonderful Tonight"
+    Songwriter: Eric Clapton
+    Year: 1977 · Album: Slowhand
+    About: Written while waiting for Pattie Boyd to get ready for
+    a Buddy Holly tribute concert; a soft-rock standard.
+    Genius:   https://genius.com/Eric-clapton-wonderful-tonight-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/ericclapton/wonderfultonight.html
+
+12) Simon & Garfunkel — "The Boxer"
+    Songwriter: Paul Simon
+    Year: 1970 · Album: Bridge over Troubled Water
+    About: A young man's hard-luck story in New York; the
+    "lie-la-lie" refrain became one of the duo's signatures.
+    Genius:   https://genius.com/Simon-and-garfunkel-the-boxer-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/simongarfunkel/theboxer.html
+
+13) Tracy Chapman — "Fast Car"
+    Songwriter: Tracy Chapman
+    Year: 1988 · Album: Tracy Chapman
+    About: A working-class escape narrative; a renewed mainstream
+    hit after Luke Combs's 2023 country cover.
+    Genius:   https://genius.com/Tracy-chapman-fast-car-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/tracychapman/fastcar.html
+
+14) Lady Gaga & Bradley Cooper — "Shallow"
+    Songwriters: Lady Gaga, Mark Ronson, Anthony Rossomando,
+    Andrew Wyatt
+    Year: 2018 · From the film/soundtrack: A Star Is Born
+    About: The film's emotional centrepiece; won the Oscar for
+    Best Original Song and a Grammy for Song of the Year.
+    Genius:   https://genius.com/Lady-gaga-and-bradley-cooper-shallow-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/ladygaga/shallow.html
+
+15) Ed Sheeran — "Thinking Out Loud"
+    Songwriters: Ed Sheeran, Amy Wadge
+    Year: 2014 · Album: x (multiply)
+    About: A modern wedding-first-dance staple; won Grammys for
+    Song and Performance of the Year (2016).
+    Genius:   https://genius.com/Ed-sheeran-thinking-out-loud-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/edsheeran/thinkingoutloud.html
+
+16) Eric Clapton — "Tears in Heaven"
+    Songwriters: Eric Clapton, Will Jennings
+    Year: 1992 · From the film "Rush" / Unplugged
+    About: Written after the death of Clapton's young son Conor;
+    quietly devastating.
+    Genius:   https://genius.com/Eric-clapton-tears-in-heaven-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/ericclapton/tearsinheaven.html
+
+17) The Beatles — "Blackbird"
+    Songwriters: Lennon–McCartney (written by Paul McCartney)
+    Year: 1968 · Album: The Beatles ("White Album")
+    About: A solo-acoustic piece McCartney has said was inspired
+    by the U.S. civil-rights movement.
+    Genius:   https://genius.com/The-beatles-blackbird-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/beatles/blackbird.html
+
+18) Simon & Garfunkel — "Bridge Over Troubled Water"
+    Songwriter: Paul Simon
+    Year: 1970 · Album: Bridge over Troubled Water
+    About: Gospel-influenced ballad; Art Garfunkel's lead vocal
+    is one of the most famous in pop history.
+    Genius:   https://genius.com/Simon-and-garfunkel-bridge-over-troubled-water-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/simongarfunkel/bridgeovertroubledwater.html
+
+19) Van Morrison — "Brown Eyed Girl"
+    Songwriter: Van Morrison
+    Year: 1967 · Album: Blowin' Your Mind!
+    About: Sunny R&B-pop reminiscence; one of the most-played
+    songs in radio history.
+    Genius:   https://genius.com/Van-morrison-brown-eyed-girl-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/vanmorrison/browneyedgirl.html
+
+20) Trad. / The Animals — "The House of the Rising Sun"
+    Songwriters: Traditional folk; arrangement credited to Alan
+    Price (The Animals, 1964)
+    Year of recording: 1964 · Album: The Animals
+    About: A centuries-old folk lament; The Animals' organ-driven
+    arrangement made it a worldwide #1.
+    Genius:   https://genius.com/The-animals-the-house-of-the-rising-sun-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/animals/thehouseoftherisingsun.html
+
+21) The Beatles — "Here Comes the Sun"
+    Songwriter: George Harrison
+    Year: 1969 · Album: Abbey Road
+    About: Written in Eric Clapton's garden after a long winter
+    of Beatles business meetings; their most-streamed song.
+    Genius:   https://genius.com/The-beatles-here-comes-the-sun-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/beatles/herecomesthesun.html
+
+22) Dolly Parton — "Jolene"
+    Songwriter: Dolly Parton
+    Year: 1973 · Album: Jolene
+    About: A plea to a beautiful red-haired woman not to take
+    Dolly's man; based on a real bank teller and a young fan.
+    Genius:   https://genius.com/Dolly-parton-jolene-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/dollyparton/jolene.html
+
+23) Bart Howard — "Fly Me to the Moon" (Sinatra/Basie version)
+    Songwriter: Bart Howard (originally titled "In Other Words")
+    Year written: 1954. Sinatra with Count Basie: 1964 · Album:
+    It Might as Well Be Swing
+    About: A jazz-pop standard; the Sinatra/Basie recording was
+    associated with NASA's Apollo missions.
+    Genius:   https://genius.com/Frank-sinatra-fly-me-to-the-moon-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/franksinatra/flymetothemoon.html
+
+24) Sting — "Shape of My Heart"
+    Songwriters: Sting, Dominic Miller
+    Year: 1993 · Album: Ten Summoner's Tales
+    About: Famous fingerstyle guitar figure (Miller); the song
+    appears in the film Léon: The Professional.
+    Genius:   https://genius.com/Sting-shape-of-my-heart-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/sting/shapeofmyheart.html
+
+25) Sting — "Fragile"
+    Songwriter: Sting
+    Year: 1987 · Album: ...Nothing Like the Sun
+    About: Written in response to the killing of American
+    engineer Ben Linder in Nicaragua; a meditation on violence.
+    Genius:   https://genius.com/Sting-fragile-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/sting/fragile.html
+
+26) George Gershwin — "Summertime"
+    Composers/lyricists: George Gershwin (music); DuBose Heyward
+    and Ira Gershwin (lyrics)
+    Year: 1935 · From the opera Porgy and Bess
+    About: A lullaby that opens the opera; one of the most-
+    covered songs ever written.
+    Genius:   https://genius.com/search?q=Gershwin+Summertime+Porgy+and+Bess
+    AZLyrics: https://www.azlyrics.com/lyrics/ellafitzgerald/summertime.html
+
+27) Ben E. King — "Stand By Me"
+    Songwriters: Ben E. King, Jerry Leiber, Mike Stoller
+    Year: 1961 · Single (later on Don't Play That Song!)
+    About: Inspired by the gospel song "Lord Stand By Me"; a
+    cornerstone of soul music.
+    Genius:   https://genius.com/Ben-e-king-stand-by-me-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/beneking/standbyme.html
+
+28) David Bowie — "Heroes"
+    Songwriters: David Bowie, Brian Eno
+    Year: 1977 · Album: "Heroes"
+    About: Inspired by a couple kissing by the Berlin Wall;
+    centrepiece of Bowie's Berlin trilogy.
+    Genius:   https://genius.com/David-bowie-heroes-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/davidbowie/heroes.html
+
+29) De Derre — "Jenter som kommer"
+    Songwriter: Jørn Christensen / De Derre (Norwegian)
+    Year: 1995 · Album: Slik er det bare
+    About: Norwegian pop-rock; nostalgic look back at girls who
+    "come and go" through life.
+    Genius:   https://genius.com/search?q=De+Derre+Jenter+som+kommer
+    Lyrics:   https://lyricstranslate.com/en/de-derre-jenter-som-kommer-lyrics.html
+
+30) Vilhelm Dybwad / Halfdan Kjerulf — "Hovedøen"
+    Lyrics: Vilhelm Dybwad; music traditionally attributed to
+    Halfdan Kjerulf (the song is widely known via the version
+    associated with Kari Diesen)
+    Year: 19th-c. lyric, popularised in 20th-c. recordings
+    About: A wistful Oslofjord serenade about the island of
+    Hovedøya outside Oslo.
+    Genius:   https://genius.com/search?q=Hovedøen+Dybwad+Kjerulf
+    Search:   https://www.google.com/search?q=%22Hovedøen%22+lyrics+Dybwad+Kjerulf
+
+31) Monty Python — "Always Look on the Bright Side of Life"
+    Songwriter: Eric Idle
+    Year: 1979 · From the film: Monty Python's Life of Brian
+    About: The cheerful crucifixion finale; later a UK Top-3 hit
+    and a stadium singalong staple.
+    Genius:   https://genius.com/Monty-python-always-look-on-the-bright-side-of-life-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/montypython/alwayslookonthebrightsideoflife.html
+
+32) Postgirobygget — "En Solskinnsdag"
+    Songwriter: Aage Sten Nilsen / Postgirobygget
+    Year: 1996 · Album: Inn for landing
+    About: Norwegian summer-pop classic; an irrepressibly cheerful
+    "sunshine day" anthem.
+    Genius:   https://genius.com/search?q=Postgirobygget+En+Solskinnsdag
+    Lyrics:   https://lyricstranslate.com/en/postgirobygget-en-solskinnsdag-lyrics.html
+
+33) Eleanor Farjeon / Cat Stevens — "Morning Has Broken"
+    Lyrics: Eleanor Farjeon (1931); music: traditional Gaelic
+    melody "Bunessan." Cat Stevens recording: 1971
+    Album: Teaser and the Firecat
+    About: Originally a Christian hymn; Cat Stevens's piano
+    arrangement (by Rick Wakeman) made it a pop standard.
+    Genius:   https://genius.com/Cat-stevens-morning-has-broken-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/catstevens/morninghasbroken.html
+
+34) Trond-Viggo Torgersen — "Tenke sjæl"
+    Songwriter: Trond-Viggo Torgersen
+    Year: 1986 · From the NRK kids' show "Tenke sjæl"
+    About: A beloved Norwegian children's song championing
+    independent thinking. ("Think for yourself.")
+    Genius:   https://genius.com/search?q=Trond+Viggo+Tenke+sjæl
+    Lyrics:   https://lyricstranslate.com/en/trond-viggo-torgersen-tenke-sjæl-lyrics.html
+
+35) Pink Floyd — "Wish You Were Here"
+    Songwriters: Roger Waters, David Gilmour
+    Year: 1975 · Album: Wish You Were Here
+    About: A lament for departed Floyd founder Syd Barrett and
+    a critique of music-industry alienation.
+    Genius:   https://genius.com/Pink-floyd-wish-you-were-here-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/pinkfloyd/wishyouwerehere.html
+
+36) The Kids — "Forelska i lærer'n"
+    Songwriter: Anita Hegerland / The Kids team (Norwegian)
+    Year: 1980 · Single (Eurovision Norway entry, performed by
+    the children's group "The Kids")
+    About: An innocent crush-on-the-teacher pop song; a Norwegian
+    nostalgia favourite.
+    Genius:   https://genius.com/search?q=The+Kids+Forelska+i+lærer'n
+    Lyrics:   https://lyricstranslate.com/en/kids-forelska-i-lærern-lyrics.html
+
+37) Ketil Bjørnstad — "Sommernatt ved fjorden"
+    Songwriter: Ketil Bjørnstad (Norwegian)
+    Year: 1977 · Album: Leve Patagonia
+    About: Atmospheric Norwegian song-poem about a midsummer
+    night by the fjord.
+    Genius:   https://genius.com/search?q=Ketil+Bjørnstad+Sommernatt+ved+fjorden
+    Lyrics:   https://lyricstranslate.com/en/ketil-bjørnstad-sommernatt-ved-fjorden-lyrics.html
+
+38) deLillos — "Neste sommer"
+    Songwriter: Lars Lillo-Stenberg / deLillos (Norwegian)
+    Year: 1986 · Album: Suser avgårde
+    About: Wry, tender Norwegian indie-rock about saving up the
+    relationship for next summer.
+    Genius:   https://genius.com/search?q=deLillos+Neste+sommer
+    Lyrics:   https://lyricstranslate.com/en/delillos-neste-sommer-lyrics.html
+
+39) Lillebjørn Nilsen / Pete Seeger — "Barn av regnbuen"
+    Songwriters: Pete Seeger ("My Rainbow Race", 1973);
+    Norwegian lyrics by Lillebjørn Nilsen
+    Year (Norwegian version): 1973
+    About: Became a Norwegian protest anthem after the 22 July
+    2011 attacks, sung in mass gatherings against extremism.
+    Genius:   https://genius.com/search?q=Lillebjørn+Nilsen+Barn+av+regnbuen
+    Lyrics:   https://lyricstranslate.com/en/lillebjørn-nilsen-barn-av-regnbuen-lyrics.html
+
+40) Evert Taube — "Flickan i Havanna"
+    Songwriter: Evert Taube (Swedish)
+    Year: 1932
+    About: A Taube ballad of romance and exoticism set in Cuba;
+    a Swedish trubadur classic.
+    Genius:   https://genius.com/search?q=Evert+Taube+Flickan+i+Havanna
+    Lyrics:   https://lyricstranslate.com/en/evert-taube-flickan-i-havanna-lyrics.html
+
+41) Lillebjørn Nilsen — "Stilleste gutt på sovesal 1"
+    Songwriter: Lillebjørn Nilsen (Norwegian)
+    Year: 1971 · Album: Portrett
+    About: A poignant memory of the quietest boy in dorm 1 from
+    Nilsen's school days; one of his best-loved songs.
+    Genius:   https://genius.com/search?q=Lillebjørn+Nilsen+Stilleste+gutt
+    Lyrics:   https://lyricstranslate.com/en/lillebjørn-nilsen-stilleste-gutt-på-sovesal-1-lyrics.html
+
+42) Evert Taube — "Brevet från Lillan"
+    Songwriter: Evert Taube (Swedish)
+    Year: 1942
+    About: A father reading a letter from his little daughter;
+    one of Taube's tender narrative songs.
+    Genius:   https://genius.com/search?q=Evert+Taube+Brevet+från+Lillan
+    Lyrics:   https://lyricstranslate.com/en/evert-taube-brevet-från-lillan-lyrics.html
+
+43) Bob Thiele & George David Weiss / Louis Armstrong —
+    "What a Wonderful World"
+    Songwriters: Bob Thiele (as "George Douglas") & George David
+    Weiss
+    Year: 1967 · Recorded by Louis Armstrong (single)
+    About: A gentle, optimistic standard; initially a UK #1, it
+    became a US hit after appearing in Good Morning, Vietnam.
+    Genius:   https://genius.com/Louis-armstrong-what-a-wonderful-world-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/louisarmstrong/whatawonderfulworld.html
+
+44) Lillebjørn Nilsen — "Tanta til Beate"
+    Songwriter: Lillebjørn Nilsen (Norwegian)
+    Year: 1993 · Album: Original Nilsen
+    About: A warmhearted Oslo character sketch about Beate's
+    aunt; a singalong favourite.
+    Genius:   https://genius.com/search?q=Lillebjørn+Nilsen+Tanta+til+Beate
+    Lyrics:   https://lyricstranslate.com/en/lillebjørn-nilsen-tanta-til-beate-lyrics.html
+
+45) Henry Mancini — "Moon River"
+    Composer: Henry Mancini · Lyricist: Johnny Mercer
+    Year: 1961 · From the film: Breakfast at Tiffany's
+    About: Sung by Audrey Hepburn in the film; won Oscars for
+    Best Original Song and Best Original Score.
+    Genius:   https://genius.com/Andy-williams-moon-river-lyrics
+    AZLyrics: https://www.azlyrics.com/lyrics/andywilliams/moonriver.html
+
+46) Vamp — "Tir n'a Noir"
+    Songwriters: Vamp (lyrics often by Øyvind Staveland and
+    band; Norwegian)
+    Year: 2001 · Album: Flua på veggen
+    About: A Norwegian-language meditation evoking the Celtic
+    "Land of Night"; one of Vamp's signature songs.
+    Genius:   https://genius.com/search?q=Vamp+Tir+n'a+Noir
+    Lyrics:   https://lyricstranslate.com/en/vamp-tir-na-noir-lyrics.html
+
+
+GENERAL LYRICS-SEARCH FALLBACKS
+-------------------------------
+If a specific link above doesn't resolve, try one of these:
+- Genius search: https://genius.com/search?q=ARTIST+SONG
+- AZLyrics search: https://search.azlyrics.com/search.php?q=ARTIST+SONG
+- LyricsTranslate (good for Norwegian/Swedish):
+  https://lyricstranslate.com/  (use the search box)
+- Musixmatch: https://www.musixmatch.com/search/ARTIST%20SONG
