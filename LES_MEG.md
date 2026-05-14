@@ -43,12 +43,34 @@ En enkel, frittstående HTML-app for å samle sanger og lage trykkeklare PDF-san
 3. Skriv ut, eller last opp til Drive og del lenken med deltakerne.
 
 ### Synkronisere mellom enheter
-Appen lagrer alltid lokalt i nettleseren der du jobber. For å få samme data på flere enheter (eller dele med andre):
+
+**Alternativ A: GitHub-synk (anbefalt – fullautomatisk)**
+
+Hvis du allerede hoster appen på GitHub Pages, kan du la appen lagre databasen i samme repo:
+
+1. Lag en *Personal Access Token (PAT)* på GitHub:
+   - Gå til [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens)
+   - "Generate new token" → velg **Fine-grained personal access token**
+   - Repository access: **Only select repositories** → velg ditt allsang-repo
+   - Permissions → Repository permissions → **Contents: Read and write**
+   - Generer og kopier tokenet (det vises bare én gang!)
+2. I appen: gå til **💾 Data** → **🐙 GitHub-synk**.
+3. Fyll inn brukernavn, repo-navn, branch (vanligvis `main`), sti (`sangdatabase.json`), og lim inn tokenet.
+4. Hak av **Auto-synk** og trykk **💾 Lagre innstillinger**.
+5. Trykk **⬇️ Hent fra GitHub** første gang (eller **⬆️ Lagre til GitHub** hvis fila ikke finnes).
+
+Etterpå: hver gang du åpner appen henter den siste versjon fra GitHub, og hver endring lagres automatisk tilbake (3 sekunders forsinkelse for å samle endringer). På en ny enhet er det bare å fylle inn samme brukernavn/repo/token, så er du i gang.
+
+> ⚠️ **Tokenet lagres bare lokalt** i nettleseren. Del det aldri, og IKKE legg det inn i selve repoet (det skal kun limes inn i appens innstillinger).
+
+**Alternativ B: Manuell eksport/import (uten GitHub)**
+
+Hvis du ikke vil bruke GitHub-synk:
 1. Etter en arbeidsøkt: **💾 Data** → **⬇️ Last ned database**.
 2. Last opp den nye `sangdatabase_yyyy-mm-dd.json` til Google Drive (overskriv den gamle hvis du vil).
 3. På annen enhet: åpne `Allsang.html` → **💾 Data** → **⬆️ Last opp database** → velg den nyeste fila.
 
-> 💡 **Anbefalt rutine:** Last ned database etter hver arbeidsøkt – da har du både backup og synk i ett.
+> 💡 **Anbefalt rutine:** Last ned database etter hver arbeidsøkt som ekstra sikkerhetskopi – også når du bruker GitHub-synk.
 
 ## Tekniske notater
 

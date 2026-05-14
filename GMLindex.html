@@ -155,59 +155,6 @@
     </div>
 
     <div class="card">
-      <h3 style="margin-top:0">🐙 GitHub-synk</h3>
-      <p style="color:var(--muted);font-size:14px">
-        La appen lagre databasen automatisk i en JSON-fil i ditt eget GitHub-repo. Da synkes alt
-        mellom enhetene dine uten at du må eksportere/importere manuelt.
-      </p>
-      <div class="row">
-        <div>
-          <label>GitHub-brukernavn</label>
-          <input type="text" id="ghOwner" placeholder="f.eks. erlandersen" autocomplete="off" />
-        </div>
-        <div>
-          <label>Repo-navn</label>
-          <input type="text" id="ghRepo" placeholder="f.eks. allsang" autocomplete="off" />
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <label>Branch</label>
-          <input type="text" id="ghBranch" value="main" autocomplete="off" />
-        </div>
-        <div>
-          <label>Sti til JSON-fil</label>
-          <input type="text" id="ghPath" value="sangdatabase.json" autocomplete="off" />
-        </div>
-      </div>
-      <label>Personal Access Token (PAT)
-        <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener" style="font-size:12px;margin-left:6px;color:var(--accent)">Opprett ny ↗</a>
-      </label>
-      <input type="password" id="ghToken" placeholder="github_pat_… eller ghp_…" autocomplete="off" />
-      <label style="display:flex;align-items:center;gap:8px;margin-top:10px">
-        <input type="checkbox" id="ghAutoSync" />
-        Auto-synk: hent ved oppstart, lagre automatisk ved endringer (3 sek forsinkelse)
-      </label>
-      <div class="row" style="margin-top:12px">
-        <button class="btn secondary" id="btnGhSaveSettings">💾 Lagre innstillinger</button>
-        <button class="btn" id="btnGhPull">⬇️ Hent fra GitHub</button>
-        <button class="btn" id="btnGhPush" style="background:var(--ok)">⬆️ Lagre til GitHub</button>
-      </div>
-      <div id="ghStatus" style="margin-top:10px;font-size:13px;color:var(--muted);min-height:20px"></div>
-      <div class="help">
-        <b>Slik oppretter du en token (engangsoppsett):</b>
-        <ol style="margin:6px 0 0 18px;padding:0">
-          <li>Gå til <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a></li>
-          <li>«Generate new token» → velg <b>Fine-grained personal access token</b></li>
-          <li>Repository access: <b>Only select repositories</b> → velg ditt allsang-repo</li>
-          <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
-          <li>Klikk «Generate token», kopier det og lim inn i feltet over</li>
-        </ol>
-        <p style="margin:8px 0 0 0">⚠️ <b>Tokenet lagres bare lokalt</b> i denne nettleseren (i localStorage). Del det aldri med noen, og IKKE legg det inn i selve repoet.</p>
-      </div>
-    </div>
-
-    <div class="card">
       <h3 style="margin-top:0">Tøm database</h3>
       <p style="color:var(--muted);font-size:14px">Sletter alle sanger og set-lister i nettleseren. Dette kan ikke angres.</p>
       <button class="btn danger" id="btnClearAll">🗑️ Slett alt</button>
@@ -362,7 +309,6 @@ function saveDB(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
   dirty = true;
   updateAutoSave();
-  scheduleGhPush();
 }
 function updateAutoSave(){
   const el = document.getElementById('autoSave');
@@ -907,165 +853,6 @@ document.getElementById('btnClearAll').addEventListener('click', ()=>{
   renderSongs(); renderSetlists(); updateStats();
 });
 
-/* ---------- GitHub sync ---------- */
-const GH_KEY = 'allsang_github_v1';
-let ghSettings = { owner:'', repo:'', branch:'main', path:'sangdatabase.json', token:'', autoSync:false };
-let ghSha = null;
-let ghSyncTimer = null;
-let ghBusy = false;
-
-function loadGhSettings(){
-  try{
-    const raw = localStorage.getItem(GH_KEY);
-    if(raw) Object.assign(ghSettings, JSON.parse(raw));
-  }catch(e){ console.error(e); }
-  document.getElementById('ghOwner').value    = ghSettings.owner || '';
-  document.getElementById('ghRepo').value     = ghSettings.repo  || '';
-  document.getElementById('ghBranch').value   = ghSettings.branch || 'main';
-  document.getElementById('ghPath').value     = ghSettings.path  || 'sangdatabase.json';
-  document.getElementById('ghToken').value    = ghSettings.token || '';
-  document.getElementById('ghAutoSync').checked = !!ghSettings.autoSync;
-}
-function saveGhSettings(){
-  ghSettings = {
-    owner:    document.getElementById('ghOwner').value.trim(),
-    repo:     document.getElementById('ghRepo').value.trim(),
-    branch:   document.getElementById('ghBranch').value.trim() || 'main',
-    path:     document.getElementById('ghPath').value.trim()   || 'sangdatabase.json',
-    token:    document.getElementById('ghToken').value.trim(),
-    autoSync: document.getElementById('ghAutoSync').checked
-  };
-  localStorage.setItem(GH_KEY, JSON.stringify(ghSettings));
-}
-function ghReady(){ return ghSettings.owner && ghSettings.repo && ghSettings.token; }
-function setGhStatus(msg, type){
-  const el = document.getElementById('ghStatus');
-  if(!el) return;
-  const colors = {ok:'var(--ok)', warn:'var(--warn)', err:'var(--danger)'};
-  el.style.color = colors[type] || 'var(--muted)';
-  el.textContent = msg;
-}
-function utf8ToB64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = '';
-  for(let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-function b64ToUtf8(b64){
-  const bin = atob((b64||'').replace(/\s/g,''));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder('utf-8').decode(bytes);
-}
-function ghContentUrl(withRef){
-  const base = `https://api.github.com/repos/${encodeURIComponent(ghSettings.owner)}/${encodeURIComponent(ghSettings.repo)}/contents/${ghSettings.path.split('/').map(encodeURIComponent).join('/')}`;
-  return withRef ? `${base}?ref=${encodeURIComponent(ghSettings.branch)}` : base;
-}
-function ghHeaders(){
-  return {
-    Authorization: `Bearer ${ghSettings.token}`,
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28'
-  };
-}
-
-async function ghPull(){
-  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
-  if(ghBusy) return;
-  ghBusy = true;
-  setGhStatus('Henter database fra GitHub…');
-  try{
-    const r = await fetch(ghContentUrl(true), { headers: ghHeaders() });
-    if(r.status === 404){
-      setGhStatus('Fila finnes ikke i repoet ennå – trykk «Lagre til GitHub» for å opprette.', 'warn');
-      ghSha = null; return;
-    }
-    if(r.status === 401 || r.status === 403){
-      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet har Contents: Read and write på dette repoet.`);
-    }
-    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
-    const data = await r.json();
-    const text = b64ToUtf8(data.content);
-    const parsed = JSON.parse(text);
-    if(!parsed.songs || !Array.isArray(parsed.songs)) throw new Error('JSON-fila mangler songs[]');
-    if(!parsed.setlists) parsed.setlists = [];
-    DB = parsed;
-    ghSha = data.sha;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
-    dirty = false;
-    renderSongs(); renderSetlists(); updateStats(); updateAutoSave();
-    setGhStatus(`✅ Hentet ${DB.songs.length} sanger og ${DB.setlists.length} set-lister fra GitHub`, 'ok');
-  }catch(err){
-    setGhStatus('❌ ' + err.message, 'err');
-    console.error(err);
-  } finally { ghBusy = false; }
-}
-
-async function ghPush(){
-  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
-  if(ghBusy){ scheduleGhPush(); return; }
-  ghBusy = true;
-  setGhStatus('Lagrer til GitHub…');
-  try{
-    // Hent SHA hvis vi ikke har en (fila eksisterer kanskje fra før)
-    if(!ghSha){
-      const ck = await fetch(ghContentUrl(true), { headers: ghHeaders() });
-      if(ck.ok){ ghSha = (await ck.json()).sha; }
-      else if(ck.status !== 404){
-        throw new Error(`Kunne ikke sjekke fila: HTTP ${ck.status}`);
-      }
-    }
-    const body = {
-      message: `Allsang: oppdatert sangdatabase (${DB.songs.length} sanger, ${DB.setlists.length} set-lister)`,
-      content: utf8ToB64(JSON.stringify(DB, null, 2)),
-      branch: ghSettings.branch
-    };
-    if(ghSha) body.sha = ghSha;
-    const r = await fetch(ghContentUrl(false), {
-      method: 'PUT',
-      headers: { ...ghHeaders(), 'Content-Type':'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(r.status === 409 || r.status === 422){
-      // Konflikt: noen andre har endret fila i mellomtiden
-      ghSha = null;
-      throw new Error('Konflikt: fila ble endret eksternt. Trykk «Hent fra GitHub», sjekk endringene, og lagre på nytt.');
-    }
-    if(r.status === 401 || r.status === 403){
-      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet har Contents: Read and write.`);
-    }
-    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
-    const data = await r.json();
-    ghSha = data.content.sha;
-    dirty = false; updateAutoSave();
-    setGhStatus(`✅ Lagret til GitHub kl. ${new Date().toLocaleTimeString('no-NO')}`, 'ok');
-  }catch(err){
-    setGhStatus('❌ ' + err.message, 'err');
-    console.error(err);
-  } finally { ghBusy = false; }
-}
-
-function scheduleGhPush(){
-  if(!ghSettings.autoSync || !ghReady()) return;
-  clearTimeout(ghSyncTimer);
-  setGhStatus('✏️ Endring registrert – lagrer om 3 sekunder…');
-  ghSyncTimer = setTimeout(()=>{ ghPush(); }, 3000);
-}
-
-document.getElementById('btnGhSaveSettings').addEventListener('click', ()=>{
-  saveGhSettings();
-  setGhStatus('✅ Innstillinger lagret', 'ok');
-});
-document.getElementById('btnGhPull').addEventListener('click', ()=>{
-  saveGhSettings(); ghPull();
-});
-document.getElementById('btnGhPush').addEventListener('click', ()=>{
-  saveGhSettings(); ghPush();
-});
-// Lagre innstillinger automatisk ved endring av input-feltene (uten å trigge synk)
-['ghOwner','ghRepo','ghBranch','ghPath','ghToken','ghAutoSync'].forEach(id=>{
-  document.getElementById(id).addEventListener('change', saveGhSettings);
-});
-
 /* ---------- Misc ---------- */
 function escapeHtml(s){
   return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1078,16 +865,11 @@ document.querySelectorAll('.modal-bg').forEach(bg=>{
 
 /* ---------- Boot ---------- */
 loadDB();
-loadGhSettings();
 renderSongs();
 renderSetlists();
 updateStats();
 updateAutoSave();
 dirty = false; updateAutoSave();
-// Auto-pull fra GitHub ved oppstart hvis aktivert
-if(ghSettings.autoSync && ghReady()){
-  ghPull();
-}
 </script>
 </body>
 </html>
