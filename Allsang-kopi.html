@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Allsang – Sangbok for lystig lag</title>
+<style>
+  :root{
+    --bg:#f6f3ee;
+    --card:#ffffff;
+    --ink:#222;
+    --muted:#666;
+    --accent:#7a4a2b;
+    --accent-2:#b8744a;
+    --line:#e3ddd3;
+    --ok:#2e7d32;
+    --warn:#b26a00;
+    --danger:#b00020;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45}
+  header{background:linear-gradient(180deg,#fff,#f0e9dc);border-bottom:1px solid var(--line);
+    padding:16px 20px;position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
+  header h1{margin:0 0 8px 0;font-size:22px;color:var(--accent)}
+  header h1 span{font-weight:400;color:var(--muted);font-size:14px;margin-left:8px}
+  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav button{background:transparent;border:1px solid var(--line);padding:8px 14px;border-radius:999px;
+    cursor:pointer;font-size:14px;color:var(--ink)}
+  nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  main{max-width:1100px;margin:0 auto;padding:20px}
+  .tab{display:none}
+  .tab.active{display:block}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .toolbar input[type=search]{flex:1;min-width:200px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:9px 14px;border-radius:8px;
+    cursor:pointer;font-size:14px;font-weight:500}
+  .btn:hover{background:var(--accent-2)}
+  .btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.secondary:hover{background:#faf6ee}
+  .btn.danger{background:var(--danger)}
+  .btn.small{padding:5px 10px;font-size:13px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  input[type=text],input[type=search],textarea,select{
+    border:1px solid var(--line);padding:9px 12px;border-radius:8px;font:inherit;background:#fff;width:100%}
+  textarea{resize:vertical;min-height:160px;font-family:'Courier New',monospace;font-size:13px}
+  label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;
+    box-shadow:var(--shadow)}
+  .song-row{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
+  .song-row:hover{background:#faf6ee}
+  .song-info{flex:1;min-width:0}
+  .song-title{font-weight:600}
+  .song-artist{color:var(--muted);font-size:13px}
+  .song-meta{font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:#eee;color:#555}
+  .badge.has-chords{background:#e8f5e9;color:var(--ok)}
+  .badge.no-chords{background:#fff3e0;color:var(--warn)}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-start;justify-content:center;
+    z-index:50;overflow-y:auto;padding:20px}
+  .modal-bg.open{display:flex}
+  .modal{background:#fff;border-radius:12px;max-width:780px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+  .modal h2{margin-top:0}
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row > *{flex:1;min-width:180px}
+  .help{background:#f5efe2;border-left:3px solid var(--accent-2);padding:10px 14px;border-radius:6px;
+    font-size:13px;color:#5a4530;margin:12px 0}
+  .help code{background:#fff;padding:1px 6px;border-radius:4px}
+  .lookup-buttons{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .lookup-buttons a{font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink);background:#fff}
+  .lookup-buttons a:hover{background:#faf6ee}
+  .setlist-songs{margin-top:10px;border:1px dashed var(--line);border-radius:8px;padding:8px;min-height:50px}
+  .setlist-song{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;background:#fdfaf3;margin-bottom:4px}
+  .setlist-song .controls{display:flex;gap:4px}
+  .setlist-song button{background:#fff;border:1px solid var(--line);padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px}
+  .empty{color:var(--muted);text-align:center;padding:30px;font-style:italic}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+  .stat .num{font-size:24px;font-weight:600;color:var(--accent)}
+  .stat .lbl{font-size:12px;color:var(--muted)}
+  .auto-save{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-left:auto}
+  .auto-save .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+  .auto-save.dirty .dot{background:var(--warn)}
+  .auto-save.dirty{color:var(--warn)}
+  .picker-list{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fafafa}
+  .picker-row{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:6px}
+  .picker-row:hover{background:#fff}
+  .picker-row.added{opacity:.5}
+  .pdf-options{background:#f9f5eb;border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:10px}
+  @media (max-width:600px){
+    main{padding:12px}
+    nav button{padding:6px 10px;font-size:13px}
+    header h1{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎸 Allsang <span>– Sangbok for lystig lag</span></h1>
+  <nav>
+    <button data-tab="songs" class="active">📚 Sanger</button>
+    <button data-tab="setlists">🎵 Set-lister</button>
+    <button data-tab="data">💾 Data</button>
+    <button data-tab="help">❓ Hjelp</button>
+    <span class="auto-save" id="autoSave"><span class="dot"></span><span id="autoSaveText">Lagret</span></span>
+  </nav>
+</header>
+
+<main>
+  <!-- ========= SONGS ========= -->
+  <section id="tab-songs" class="tab active">
+    <div class="toolbar">
+      <button class="btn" id="btnNewSong">＋ Ny sang</button>
+      <input type="search" id="searchSongs" placeholder="Søk i artist eller tittel…" />
+    </div>
+    <div id="songList"></div>
+  </section>
+
+  <!-- ========= SETLISTS ========= -->
+  <section id="tab-setlists" class="tab">
+    <div class="toolbar">
+      <button class="btn" id="btnNewSetlist">＋ Ny set-list</button>
+    </div>
+    <div id="setlistList"></div>
+  </section>
+
+  <!-- ========= DATA ========= -->
+  <section id="tab-data" class="tab">
+    <div class="stats">
+      <div class="stat"><div class="num" id="statSongs">0</div><div class="lbl">sanger</div></div>
+      <div class="stat"><div class="num" id="statSetlists">0</div><div class="lbl">set-lister</div></div>
+      <div class="stat"><div class="num" id="statChords">0</div><div class="lbl">med besifring</div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Lagre / hente database</h3>
+      <p style="color:var(--muted);font-size:14px">
+        Appen lagrer automatisk i nettleserens lokale lager, men for å bruke samme database på flere
+        enheter må du eksportere til en JSON-fil og lagre den på Google Drive. På en annen enhet
+        importerer du den samme filen.
+      </p>
+      <div class="row">
+        <button class="btn" id="btnExport">⬇️ Last ned database (JSON)</button>
+        <button class="btn secondary" id="btnImport">⬆️ Last opp database (JSON)</button>
+        <input type="file" id="fileImport" accept=".json,application/json" hidden />
+      </div>
+      <div class="help">
+        <b>Tips:</b> Lagre <code>sangdatabase.json</code> i samme mappe på Drive som
+        <code>Allsang.html</code>. Etter du har lagt til/endret sanger, last ned JSON-fila igjen og
+        last opp på Drive (overskriv den gamle).
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Tøm database</h3>
+      <p style="color:var(--muted);font-size:14px">Sletter alle sanger og set-lister i nettleseren. Dette kan ikke angres.</p>
+      <button class="btn danger" id="btnClearAll">🗑️ Slett alt</button>
+    </div>
+  </section>
+
+  <!-- ========= HELP ========= -->
+  <section id="tab-help" class="tab">
+    <div class="card">
+      <h2 style="margin-top:0">Slik bruker du Allsang-appen</h2>
+      <h3>1. Legge til sanger</h3>
+      <p>Trykk <b>＋ Ny sang</b>, fyll inn artist og tittel. Bruk søkeknappene
+      til å åpne søk etter tekst og besifring i nytt vindu. Kopier teksten du finner og lim inn i
+      tekstfeltet. Lagre.</p>
+      <h3>2. Lage en set-list</h3>
+      <p>Gå til <b>Set-lister</b>, opprett en ny, gi den et navn (f.eks. "17. mai i hagen") og legg
+      til sanger. Bruk pilene til å endre rekkefølge.</p>
+      <h3>3. Lage PDF</h3>
+      <p>Inne i en set-list trykker du <b>📄 Lag PDF</b>. Du får en ferdig sangbok med innholdsfortegnelse,
+      sidetall og én sang per side (lange sanger fortsetter på neste side).</p>
+      <h3>4. Synke mellom enheter</h3>
+      <p>Bruk <b>Data</b>-fanen til å laste ned databasen som JSON. Legg fila på Google Drive.
+      På en annen enhet åpner du <code>Allsang.html</code> fra Drive og importerer JSON-fila.</p>
+      <h3>5. Sikkerhetskopi</h3>
+      <p>Det er lurt å laste ned database-fila etter en arbeidsøkt slik at du har en kopi.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ========= MODAL: SONG EDITOR ========= -->
+<div class="modal-bg" id="modalSong">
+  <div class="modal">
+    <h2 id="modalSongTitle">Ny sang</h2>
+    <div class="row">
+      <div>
+        <label>Artist</label>
+        <input type="text" id="songArtist" placeholder="F.eks. Bjørn Eidsvåg" />
+      </div>
+      <div>
+        <label>Tittel</label>
+        <input type="text" id="songTitle" placeholder="F.eks. Eg ser" />
+      </div>
+    </div>
+
+    <label>Søk etter tekst og besifring på nett</label>
+    <div class="lookup-buttons" id="lookupButtons"></div>
+    <div class="help" style="margin-top:6px">
+      Klikk en knapp for å åpne søk i ny fane. Marker tekst+besifring, kopier (Ctrl+C / Cmd+C) og
+      lim inn nedenfor (Ctrl+V / Cmd+V).
+    </div>
+
+    <label>Sangtekst (gjerne med besifring over linjene)</label>
+    <textarea id="songLyrics" placeholder="Lim inn sangteksten her..."></textarea>
+
+    <label style="display:flex;align-items:center;gap:8px;margin-top:10px">
+      <input type="checkbox" id="songHasChords" /> Inneholder besifring (rendres med fast bredde i PDF for å bevare akkordplassering)
+    </label>
+
+    <div class="modal-actions">
+      <button class="btn danger" id="btnDeleteSong" style="margin-right:auto;display:none">Slett</button>
+      <button class="btn secondary" id="btnCancelSong">Avbryt</button>
+      <button class="btn" id="btnSaveSong">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========= MODAL: SETLIST EDITOR ========= -->
+<div class="modal-bg" id="modalSetlist">
+  <div class="modal" style="max-width:900px">
+    <h2 id="modalSetlistTitle">Ny set-list</h2>
+    <div class="row">
+      <div>
+        <label>Navn på set-list</label>
+        <input type="text" id="setlistName" placeholder="F.eks. 17. mai 2026" />
+      </div>
+      <div>
+        <label>Beskrivelse / anledning (valgfritt)</label>
+        <input type="text" id="setlistDesc" placeholder="F.eks. Allsang i hagen" />
+      </div>
+    </div>
+
+    <div class="row" style="align-items:flex-start;margin-top:14px">
+      <div style="flex:1">
+        <label>Sanger i set-listen <span id="setlistSongCount" style="color:var(--muted)"></span></label>
+        <div class="setlist-songs" id="setlistSongs"></div>
+      </div>
+      <div style="flex:1">
+        <label>Velg sanger fra biblioteket</label>
+        <input type="search" id="pickerSearch" placeholder="Søk artist/tittel…" style="margin-bottom:6px" />
+        <div class="picker-list" id="pickerList"></div>
+      </div>
+    </div>
+
+    <div class="pdf-options">
+      <h4 style="margin:0 0 6px 0">PDF-innstillinger</h4>
+      <div class="row">
+        <label style="display:flex;align-items:center;gap:6px">
+          <input type="checkbox" id="pdfShowArtist" checked /> Vis artist på sangside
+        </label>
+        <label style="display:flex;align-items:center;gap:6px">
+          <input type="checkbox" id="pdfShowTOC" checked /> Inkluder innholdsfortegnelse
+        </label>
+        <label style="display:flex;align-items:center;gap:6px">
+          <input type="checkbox" id="pdfShowCover" checked /> Inkluder forside
+        </label>
+        <label style="display:flex;align-items:center;gap:6px">
+          Skriftstørrelse:
+          <select id="pdfFontSize" style="width:auto">
+            <option value="10">10 pt</option>
+            <option value="11" selected>11 pt</option>
+            <option value="12">12 pt</option>
+            <option value="13">13 pt</option>
+            <option value="14">14 pt</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn danger" id="btnDeleteSetlist" style="margin-right:auto;display:none">Slett</button>
+      <button class="btn secondary" id="btnCancelSetlist">Avbryt</button>
+      <button class="btn" id="btnSaveSetlist">Lagre</button>
+      <button class="btn" id="btnGeneratePDF" style="background:var(--ok)">📄 Lag PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- jsPDF for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+/* ===========================================================================
+   Allsang – sangbok-app
+   Lagrer data i localStorage, eksport/import som JSON.
+   PDF genereres med jsPDF.
+   =========================================================================== */
+
+const STORAGE_KEY = 'allsang_v1';
+let DB = { version: 1, songs: [], setlists: [] };
+let dirty = false;
+
+/* ---------- Persistence ---------- */
+function loadDB(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ DB = JSON.parse(raw); }
+    if(!DB.songs) DB.songs = [];
+    if(!DB.setlists) DB.setlists = [];
+  }catch(e){ console.error(e); }
+}
+function saveDB(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+  dirty = true;
+  updateAutoSave();
+}
+function updateAutoSave(){
+  const el = document.getElementById('autoSave');
+  const txt = document.getElementById('autoSaveText');
+  if(dirty){
+    el.classList.add('dirty');
+    txt.textContent = 'Endret – husk å eksportere';
+  } else {
+    el.classList.remove('dirty');
+    txt.textContent = 'Lagret lokalt';
+  }
+}
+function uid(){ return 'id-' + Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+/* ---------- Tab navigation ---------- */
+document.querySelectorAll('nav button[data-tab]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('nav button[data-tab]').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='data') updateStats();
+  });
+});
+
+/* ---------- Songs UI ---------- */
+const songListEl = document.getElementById('songList');
+const searchSongsEl = document.getElementById('searchSongs');
+let editingSongId = null;
+
+function renderSongs(){
+  const q = (searchSongsEl.value||'').toLowerCase().trim();
+  const list = DB.songs
+    .filter(s => !q || (s.artist+' '+s.title).toLowerCase().includes(q))
+    .sort((a,b)=> (a.artist+a.title).localeCompare(b.artist+b.title,'no'));
+
+  if(list.length===0){
+    songListEl.innerHTML = '<div class="empty">Ingen sanger ennå. Trykk «＋ Ny sang» for å legge til den første.</div>';
+    return;
+  }
+  songListEl.innerHTML = list.map(s => {
+    const chordBadge = s.hasChords
+      ? '<span class="badge has-chords">Med besifring</span>'
+      : '<span class="badge no-chords">Bare tekst</span>';
+    const lines = (s.lyrics||'').split('\n').length;
+    return `<div class="card song-row" data-id="${s.id}">
+      <div class="song-info">
+        <div class="song-title">${escapeHtml(s.title||'(uten tittel)')}</div>
+        <div class="song-artist">${escapeHtml(s.artist||'(ukjent artist)')}</div>
+      </div>
+      <div class="song-meta">
+        ${chordBadge}<br>
+        <span style="color:var(--muted)">${lines} linjer</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  songListEl.querySelectorAll('.song-row').forEach(r=>{
+    r.addEventListener('click', ()=> openSongModal(r.dataset.id));
+  });
+}
+searchSongsEl.addEventListener('input', renderSongs);
+
+document.getElementById('btnNewSong').addEventListener('click', ()=> openSongModal(null));
+
+function openSongModal(id){
+  editingSongId = id;
+  document.getElementById('modalSongTitle').textContent = id ? 'Rediger sang' : 'Ny sang';
+  document.getElementById('btnDeleteSong').style.display = id ? '' : 'none';
+  if(id){
+    const s = DB.songs.find(x=>x.id===id);
+    if(!s) return;
+    document.getElementById('songArtist').value = s.artist||'';
+    document.getElementById('songTitle').value = s.title||'';
+    document.getElementById('songLyrics').value = s.lyrics||'';
+    document.getElementById('songHasChords').checked = !!s.hasChords;
+  } else {
+    document.getElementById('songArtist').value = '';
+    document.getElementById('songTitle').value = '';
+    document.getElementById('songLyrics').value = '';
+    document.getElementById('songHasChords').checked = false;
+  }
+  updateLookupButtons();
+  document.getElementById('modalSong').classList.add('open');
+  document.getElementById('songArtist').focus();
+}
+function closeSongModal(){
+  document.getElementById('modalSong').classList.remove('open');
+}
+document.getElementById('btnCancelSong').addEventListener('click', closeSongModal);
+
+document.getElementById('btnSaveSong').addEventListener('click', ()=>{
+  const artist = document.getElementById('songArtist').value.trim();
+  const title  = document.getElementById('songTitle').value.trim();
+  const lyrics = document.getElementById('songLyrics').value;
+  const hasChords = document.getElementById('songHasChords').checked;
+  if(!artist || !title){ alert('Du må fylle inn både artist og tittel.'); return; }
+  if(editingSongId){
+    const s = DB.songs.find(x=>x.id===editingSongId);
+    Object.assign(s, {artist,title,lyrics,hasChords,updatedAt:todayISO()});
+  } else {
+    DB.songs.push({id:uid(),artist,title,lyrics,hasChords,createdAt:todayISO(),updatedAt:todayISO()});
+  }
+  saveDB(); renderSongs(); closeSongModal();
+});
+
+document.getElementById('btnDeleteSong').addEventListener('click', ()=>{
+  if(!editingSongId) return;
+  if(!confirm('Slette denne sangen? Den fjernes også fra alle set-lister.')) return;
+  DB.songs = DB.songs.filter(s=>s.id!==editingSongId);
+  DB.setlists.forEach(sl => sl.songIds = sl.songIds.filter(id=>id!==editingSongId));
+  saveDB(); renderSongs(); renderSetlists(); closeSongModal();
+});
+
+/* Auto-fill lookup buttons when artist/title change */
+['songArtist','songTitle'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', updateLookupButtons);
+});
+function updateLookupButtons(){
+  const artist = document.getElementById('songArtist').value.trim();
+  const title  = document.getElementById('songTitle').value.trim();
+  const q = encodeURIComponent(`${artist} ${title}`.trim());
+  const qChords = encodeURIComponent(`${artist} ${title} chords besifring tekst`.trim());
+  const el = document.getElementById('lookupButtons');
+  if(!artist && !title){ el.innerHTML='<span style="color:var(--muted);font-size:13px">Fyll inn artist/tittel for å aktivere søkeknapper</span>'; return; }
+  el.innerHTML = `
+    <a href="https://www.google.com/search?q=${qChords}" target="_blank" rel="noopener">🔎 Google (tekst+besifring)</a>
+    <a href="https://www.ultimate-guitar.com/search.php?search_type=title&value=${q}" target="_blank" rel="noopener">🎸 Ultimate Guitar</a>
+    <a href="https://www.azchords.com/search.php?search=${q}&type=songs" target="_blank" rel="noopener">🎵 AZChords</a>
+    <a href="https://chordify.net/search/${q}" target="_blank" rel="noopener">🎶 Chordify</a>
+    <a href="https://www.google.com/search?q=site%3Aviseboka.no+${q}" target="_blank" rel="noopener">🇳🇴 Viseboka</a>
+    <a href="https://www.google.com/search?q=${q}+sangtekst" target="_blank" rel="noopener">📝 Bare tekst (norsk)</a>
+  `;
+}
+
+/* ---------- Setlists UI ---------- */
+const setlistListEl = document.getElementById('setlistList');
+let editingSetlistId = null;
+let workingSetlist = null; // copy under edit
+
+function renderSetlists(){
+  const list = DB.setlists.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','no'));
+  if(list.length===0){
+    setlistListEl.innerHTML = '<div class="empty">Ingen set-lister ennå. Trykk «＋ Ny set-list».</div>';
+    return;
+  }
+  setlistListEl.innerHTML = list.map(sl => {
+    const songs = sl.songIds.map(id => DB.songs.find(s=>s.id===id)).filter(Boolean);
+    const preview = songs.slice(0,3).map(s=>escapeHtml(s.title)).join(', ') + (songs.length>3?'…':'');
+    return `<div class="card" data-id="${sl.id}" style="cursor:pointer">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div style="flex:1;min-width:0">
+          <div class="song-title">${escapeHtml(sl.name||'(uten navn)')}</div>
+          <div class="song-artist">${escapeHtml(sl.description||'')}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px">${songs.length} sanger${songs.length?': '+preview:''}</div>
+        </div>
+        <div>
+          <button class="btn small" data-act="pdf">📄 PDF</button>
+          <button class="btn small secondary" data-act="edit">Rediger</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  setlistListEl.querySelectorAll('.card').forEach(card=>{
+    card.querySelector('[data-act="edit"]').addEventListener('click', e=>{
+      e.stopPropagation(); openSetlistModal(card.dataset.id);
+    });
+    card.querySelector('[data-act="pdf"]').addEventListener('click', e=>{
+      e.stopPropagation();
+      const sl = DB.setlists.find(x=>x.id===card.dataset.id);
+      if(sl) generatePDF(sl, {showArtist:true,showTOC:true,showCover:true,fontSize:11});
+    });
+    card.addEventListener('click', ()=> openSetlistModal(card.dataset.id));
+  });
+}
+
+document.getElementById('btnNewSetlist').addEventListener('click', ()=> openSetlistModal(null));
+
+function openSetlistModal(id){
+  editingSetlistId = id;
+  document.getElementById('modalSetlistTitle').textContent = id ? 'Rediger set-list' : 'Ny set-list';
+  document.getElementById('btnDeleteSetlist').style.display = id ? '' : 'none';
+  if(id){
+    const sl = DB.setlists.find(x=>x.id===id);
+    workingSetlist = JSON.parse(JSON.stringify(sl));
+  } else {
+    workingSetlist = {id:uid(), name:'', description:'', songIds:[], createdAt:todayISO()};
+  }
+  document.getElementById('setlistName').value = workingSetlist.name||'';
+  document.getElementById('setlistDesc').value = workingSetlist.description||'';
+  renderSetlistEditor();
+  document.getElementById('modalSetlist').classList.add('open');
+  document.getElementById('setlistName').focus();
+}
+function closeSetlistModal(){
+  document.getElementById('modalSetlist').classList.remove('open');
+  workingSetlist = null;
+}
+document.getElementById('btnCancelSetlist').addEventListener('click', closeSetlistModal);
+
+function renderSetlistEditor(){
+  const songsEl = document.getElementById('setlistSongs');
+  document.getElementById('setlistSongCount').textContent =
+    workingSetlist.songIds.length ? `(${workingSetlist.songIds.length})` : '';
+  if(workingSetlist.songIds.length===0){
+    songsEl.innerHTML = '<div class="empty" style="padding:14px">Legg til sanger fra listen til høyre.</div>';
+  } else {
+    songsEl.innerHTML = workingSetlist.songIds.map((id,i)=>{
+      const s = DB.songs.find(x=>x.id===id);
+      if(!s) return '';
+      return `<div class="setlist-song" data-i="${i}">
+        <div><b>${i+1}.</b> ${escapeHtml(s.title)} <span style="color:var(--muted)">– ${escapeHtml(s.artist)}</span></div>
+        <div class="controls">
+          <button data-act="up"   ${i===0?'disabled':''}>▲</button>
+          <button data-act="down" ${i===workingSetlist.songIds.length-1?'disabled':''}>▼</button>
+          <button data-act="del" style="color:var(--danger)">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+    songsEl.querySelectorAll('.setlist-song').forEach(row=>{
+      const i = parseInt(row.dataset.i,10);
+      row.querySelector('[data-act="up"]').addEventListener('click', ()=>{
+        if(i>0){ const a=workingSetlist.songIds; [a[i-1],a[i]]=[a[i],a[i-1]]; renderSetlistEditor(); }
+      });
+      row.querySelector('[data-act="down"]').addEventListener('click', ()=>{
+        const a = workingSetlist.songIds;
+        if(i<a.length-1){ [a[i],a[i+1]]=[a[i+1],a[i]]; renderSetlistEditor(); }
+      });
+      row.querySelector('[data-act="del"]').addEventListener('click', ()=>{
+        workingSetlist.songIds.splice(i,1); renderSetlistEditor();
+      });
+    });
+  }
+  renderPicker();
+}
+
+const pickerSearch = document.getElementById('pickerSearch');
+pickerSearch.addEventListener('input', renderPicker);
+function renderPicker(){
+  const q = pickerSearch.value.toLowerCase().trim();
+  const list = DB.songs
+    .filter(s => !q || (s.artist+' '+s.title).toLowerCase().includes(q))
+    .sort((a,b)=>(a.artist+a.title).localeCompare(b.artist+b.title,'no'));
+  const el = document.getElementById('pickerList');
+  if(list.length===0){ el.innerHTML = '<div class="empty">Ingen sanger funnet.</div>'; return; }
+  el.innerHTML = list.map(s=>{
+    const added = workingSetlist.songIds.includes(s.id);
+    return `<div class="picker-row ${added?'added':''}" data-id="${s.id}">
+      <div><b>${escapeHtml(s.title)}</b> <span style="color:var(--muted)">– ${escapeHtml(s.artist)}</span></div>
+      <button class="btn small" ${added?'disabled':''}>${added?'✔ Lagt til':'＋ Legg til'}</button>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.picker-row').forEach(r=>{
+    r.querySelector('button').addEventListener('click', ()=>{
+      if(!workingSetlist.songIds.includes(r.dataset.id)){
+        workingSetlist.songIds.push(r.dataset.id);
+        renderSetlistEditor();
+      }
+    });
+  });
+}
+
+document.getElementById('btnSaveSetlist').addEventListener('click', ()=>{
+  workingSetlist.name = document.getElementById('setlistName').value.trim();
+  workingSetlist.description = document.getElementById('setlistDesc').value.trim();
+  if(!workingSetlist.name){ alert('Set-listen må ha et navn.'); return; }
+  if(editingSetlistId){
+    const idx = DB.setlists.findIndex(x=>x.id===editingSetlistId);
+    DB.setlists[idx] = workingSetlist;
+  } else {
+    DB.setlists.push(workingSetlist);
+  }
+  saveDB(); renderSetlists(); closeSetlistModal();
+});
+
+document.getElementById('btnDeleteSetlist').addEventListener('click', ()=>{
+  if(!editingSetlistId) return;
+  if(!confirm('Slette set-listen? Sangene beholdes.')) return;
+  DB.setlists = DB.setlists.filter(x=>x.id!==editingSetlistId);
+  saveDB(); renderSetlists(); closeSetlistModal();
+});
+
+document.getElementById('btnGeneratePDF').addEventListener('click', ()=>{
+  // Save first if not saved
+  workingSetlist.name = document.getElementById('setlistName').value.trim();
+  workingSetlist.description = document.getElementById('setlistDesc').value.trim();
+  if(!workingSetlist.name){ alert('Set-listen må ha et navn før du kan lage PDF.'); return; }
+  if(workingSetlist.songIds.length===0){ alert('Legg til minst én sang.'); return; }
+  const opts = {
+    showArtist: document.getElementById('pdfShowArtist').checked,
+    showTOC:    document.getElementById('pdfShowTOC').checked,
+    showCover:  document.getElementById('pdfShowCover').checked,
+    fontSize:   parseInt(document.getElementById('pdfFontSize').value,10)
+  };
+  generatePDF(workingSetlist, opts);
+});
+
+/* ---------- PDF generation ---------- */
+async function generatePDF(setlist, opts){
+  const songs = setlist.songIds.map(id => DB.songs.find(s=>s.id===id)).filter(Boolean);
+  if(songs.length===0){ alert('Ingen sanger i set-listen.'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt',format:'a4'});
+  const PAGE_W = doc.internal.pageSize.getWidth();
+  const PAGE_H = doc.internal.pageSize.getHeight();
+  const MARGIN = 50;
+  const CONTENT_W = PAGE_W - 2*MARGIN;
+  const FOOTER_H = 30;
+  const HEADER_H = 60;
+  const BODY_TOP = MARGIN + HEADER_H;
+  const BODY_BOTTOM = PAGE_H - MARGIN - FOOTER_H;
+  const fontSize = opts.fontSize || 11;
+  const lineGap = fontSize * 1.35;
+
+  /* Helpers */
+  function setFont(family, style, size){
+    doc.setFont(family, style||'normal');
+    doc.setFontSize(size);
+  }
+
+  /* --------- Pass 1: render songs, recording start pages ---------
+     We start with a blank page (will become page 1). After rendering,
+     we'll insert TOC/cover pages at the front.
+  */
+  const songStarts = []; // start page (1-indexed in song-only sequence) per song
+  // Page 1 of song sequence:
+  let curPage = 1;
+
+  songs.forEach((song, idx)=>{
+    if(idx>0){ doc.addPage(); curPage++; }
+    songStarts.push(curPage);
+    renderSongPage(song);
+  });
+
+  function renderSongPage(song){
+    let y = MARGIN;
+    // Header: title + artist
+    setFont('helvetica','bold', 18);
+    const titleLines = doc.splitTextToSize(song.title || '(uten tittel)', CONTENT_W);
+    doc.text(titleLines, MARGIN, y + 18);
+    y += 18 * titleLines.length + 4;
+
+    if(opts.showArtist && song.artist){
+      setFont('helvetica','italic', 12);
+      doc.setTextColor(100);
+      doc.text(song.artist, MARGIN, y + 12);
+      doc.setTextColor(0);
+      y += 16;
+    }
+    // Divider
+    doc.setDrawColor(200);
+    doc.line(MARGIN, y+8, PAGE_W-MARGIN, y+8);
+    y += 18;
+
+    // Lyrics body
+    const lyrics = (song.lyrics||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+    const useMono = !!song.hasChords;
+    setFont(useMono?'courier':'helvetica','normal', fontSize);
+    // Split into lines, then wrap each
+    const allLines = [];
+    lyrics.split('\n').forEach(line=>{
+      if(line.length===0){ allLines.push(''); return; }
+      // For monospace lines (chords), don't wrap aggressively – split at whitespace
+      const wrapped = doc.splitTextToSize(line, CONTENT_W);
+      wrapped.forEach(w=>allLines.push(w));
+    });
+
+    // Render lines, paginating as needed
+    allLines.forEach(line=>{
+      if(y + lineGap > BODY_BOTTOM){
+        doc.addPage();
+        curPage++;
+        y = MARGIN;
+        // Continuation header
+        setFont('helvetica','italic', 10);
+        doc.setTextColor(120);
+        doc.text(`${song.title}${song.artist?' – '+song.artist:''} (forts.)`, MARGIN, y+10);
+        doc.setTextColor(0);
+        y += 24;
+        setFont(useMono?'courier':'helvetica','normal', fontSize);
+      }
+      doc.text(line, MARGIN, y + fontSize);
+      y += lineGap;
+    });
+  }
+
+  const totalSongPages = curPage; // pages used by songs (currently pages 1..totalSongPages)
+
+  /* --------- Compute TOC pages needed --------- */
+  let coverPages = opts.showCover ? 1 : 0;
+  let tocPages = 0;
+  if(opts.showTOC){
+    const tocLineHeight = 18;
+    const tocBodyH = PAGE_H - 2*MARGIN - 60; // minus title space
+    const linesPerTOCPage = Math.floor(tocBodyH / tocLineHeight);
+    tocPages = Math.max(1, Math.ceil(songs.length / linesPerTOCPage));
+  }
+  const FRONT_PAGES = coverPages + tocPages;
+
+  /* --------- Insert front pages --------- */
+  // Insert FRONT_PAGES blank pages at the beginning
+  for(let i=0; i<FRONT_PAGES; i++){
+    doc.insertPage(1);
+  }
+
+  /* --------- Render cover page --------- */
+  if(opts.showCover){
+    doc.setPage(1);
+    setFont('helvetica','bold', 28);
+    doc.text(setlist.name||'Sangbok', PAGE_W/2, PAGE_H/3, {align:'center'});
+    if(setlist.description){
+      setFont('helvetica','italic', 14);
+      doc.setTextColor(80);
+      doc.text(setlist.description, PAGE_W/2, PAGE_H/3 + 36, {align:'center'});
+      doc.setTextColor(0);
+    }
+    setFont('helvetica','normal', 11);
+    doc.setTextColor(120);
+    const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+    doc.text(`${songs.length} sanger – ${dateStr}`, PAGE_W/2, PAGE_H - MARGIN - 20, {align:'center'});
+    doc.setTextColor(0);
+  }
+
+  /* --------- Render TOC pages --------- */
+  if(opts.showTOC){
+    const tocLineHeight = 18;
+    const tocBodyH = PAGE_H - 2*MARGIN - 60;
+    const linesPerTOCPage = Math.floor(tocBodyH / tocLineHeight);
+
+    for(let p=0; p<tocPages; p++){
+      const pageNo = coverPages + 1 + p;
+      doc.setPage(pageNo);
+      setFont('helvetica','bold', 22);
+      doc.text(p===0 ? 'Innholdsfortegnelse' : 'Innholdsfortegnelse (forts.)', MARGIN, MARGIN + 22);
+
+      setFont('helvetica','normal', 12);
+      const startIdx = p*linesPerTOCPage;
+      const endIdx = Math.min(songs.length, startIdx + linesPerTOCPage);
+      let yy = MARGIN + 60;
+      for(let i=startIdx; i<endIdx; i++){
+        const s = songs[i];
+        const targetPage = songStarts[i] + FRONT_PAGES; // adjusted
+        const left = `${i+1}. ${s.title}${s.artist?' – '+s.artist:''}`;
+        const right = String(targetPage);
+        const leftTrunc = truncateForToc(doc, left, CONTENT_W - 60);
+        // Dotted leader
+        const leftWidth = doc.getTextWidth(leftTrunc);
+        const rightWidth = doc.getTextWidth(right);
+        doc.text(leftTrunc, MARGIN, yy);
+        doc.text(right, PAGE_W - MARGIN, yy, {align:'right'});
+        // dots
+        const dotsStart = MARGIN + leftWidth + 4;
+        const dotsEnd   = PAGE_W - MARGIN - rightWidth - 4;
+        if(dotsEnd > dotsStart){
+          doc.setTextColor(150);
+          let dx = dotsStart;
+          while(dx < dotsEnd){ doc.text('.', dx, yy); dx += 4; }
+          doc.setTextColor(0);
+        }
+        yy += tocLineHeight;
+      }
+    }
+  }
+
+  /* --------- Add page numbers in footer for every page --------- */
+  const totalPages = doc.internal.getNumberOfPages();
+  for(let p=1; p<=totalPages; p++){
+    doc.setPage(p);
+    setFont('helvetica','normal', 9);
+    doc.setTextColor(120);
+    if(opts.showCover && p===1){
+      // No page number on cover
+    } else {
+      doc.text(`${p} / ${totalPages}`, PAGE_W - MARGIN, PAGE_H - MARGIN/2, {align:'right'});
+      doc.text(setlist.name||'', MARGIN, PAGE_H - MARGIN/2);
+    }
+    doc.setTextColor(0);
+  }
+
+  /* --------- Save --------- */
+  const safeName = (setlist.name||'sangbok').replace(/[^\wæøåÆØÅ\s-]/g,'').replace(/\s+/g,'_');
+  doc.save(`${safeName}.pdf`);
+}
+
+function truncateForToc(doc, text, maxW){
+  if(doc.getTextWidth(text) <= maxW) return text;
+  let t = text;
+  while(t.length > 5 && doc.getTextWidth(t+'…') > maxW){
+    t = t.slice(0,-1);
+  }
+  return t + '…';
+}
+
+/* ---------- Data tab ---------- */
+function updateStats(){
+  document.getElementById('statSongs').textContent = DB.songs.length;
+  document.getElementById('statSetlists').textContent = DB.setlists.length;
+  document.getElementById('statChords').textContent = DB.songs.filter(s=>s.hasChords).length;
+}
+
+document.getElementById('btnExport').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `sangdatabase_${todayISO()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  dirty = false; updateAutoSave();
+});
+
+document.getElementById('btnImport').addEventListener('click', ()=>{
+  document.getElementById('fileImport').click();
+});
+document.getElementById('fileImport').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if(!data.songs || !Array.isArray(data.songs)) throw new Error('Mangler songs[]');
+    if(!data.setlists) data.setlists = [];
+    if(!confirm(`Importere ${data.songs.length} sanger og ${data.setlists.length} set-lister? Dette erstatter eksisterende data.`)) return;
+    DB = data;
+    saveDB();
+    renderSongs(); renderSetlists(); updateStats();
+    alert('Import fullført!');
+  }catch(err){
+    alert('Kunne ikke lese fila: '+err.message);
+  } finally {
+    e.target.value = '';
+  }
+});
+
+document.getElementById('btnClearAll').addEventListener('click', ()=>{
+  if(!confirm('Slette ALT? Dette kan ikke angres.')) return;
+  if(!confirm('Helt sikker? Eksporter først hvis du vil ha sikkerhetskopi.')) return;
+  DB = { version: 1, songs: [], setlists: [] };
+  saveDB();
+  renderSongs(); renderSetlists(); updateStats();
+});
+
+/* ---------- Misc ---------- */
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* close modal on background click */
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click', e=>{ if(e.target===bg) bg.classList.remove('open'); });
+});
+
+/* ---------- Boot ---------- */
+loadDB();
+renderSongs();
+renderSetlists();
+updateStats();
+updateAutoSave();
+dirty = false; updateAutoSave();
+</script>
+</body>
+</html>
