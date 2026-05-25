@@ -6,31 +6,37 @@
 <title>Allsang – Sangbok for lystig lag</title>
 <style>
   :root{
-    --bg:#f6f3ee;
-    --card:#ffffff;
-    --ink:#222;
-    --muted:#666;
-    --accent:#7a4a2b;
-    --accent-2:#b8744a;
-    --line:#e3ddd3;
-    --ok:#2e7d32;
-    --warn:#b26a00;
-    --danger:#b00020;
+    --bg:#f6f3ee; --card:#ffffff; --ink:#222; --muted:#666;
+    --accent:#7a4a2b; --accent-2:#b8744a; --line:#e3ddd3;
+    --ok:#2e7d32; --warn:#b26a00; --danger:#b00020;
     --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.06);
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.45}
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45}
   header{background:linear-gradient(180deg,#fff,#f0e9dc);border-bottom:1px solid var(--line);
-    padding:16px 20px;position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
+    padding:14px 20px;position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
   header h1{margin:0 0 8px 0;font-size:22px;color:var(--accent)}
   header h1 span{font-weight:400;color:var(--muted);font-size:14px;margin-left:8px}
-  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
   nav button{background:transparent;border:1px solid var(--line);padding:8px 14px;border-radius:999px;
     cursor:pointer;font-size:14px;color:var(--ink)}
   nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .sync-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;
+    font-size:12px;border:1px solid var(--line);background:#fff;margin-left:auto;cursor:pointer}
+  .sync-pill .dot{width:8px;height:8px;border-radius:50%;background:#ccc}
+  .sync-pill.ok .dot{background:var(--ok)}
+  .sync-pill.pending .dot{background:var(--warn)}
+  .sync-pill.err .dot{background:var(--danger)}
+  .sync-pill.local{color:var(--muted)}
+  .sync-pill:hover{background:#faf6ee}
   main{max-width:1100px;margin:0 auto;padding:20px}
+  .banner{background:#fff3cd;border:1px solid #f4d36b;color:#5a4a1f;padding:12px 16px;border-radius:10px;
+    margin-bottom:14px;display:flex;align-items:center;gap:12px}
+  .banner.error{background:#fde2e2;border-color:#f5a3a3;color:#5a1f1f}
+  .banner .icon{font-size:22px}
+  .banner button{background:var(--accent);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;white-space:nowrap}
+  .banner button.dismiss{background:transparent;color:#5a4a1f;border:1px solid currentColor}
   .tab{display:none}
   .tab.active{display:block}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
@@ -43,7 +49,7 @@
   .btn.danger{background:var(--danger)}
   .btn.small{padding:5px 10px;font-size:13px}
   .btn:disabled{opacity:.5;cursor:not-allowed}
-  input[type=text],input[type=search],textarea,select{
+  input[type=text],input[type=search],input[type=password],textarea,select{
     border:1px solid var(--line);padding:9px 12px;border-radius:8px;font:inherit;background:#fff;width:100%}
   textarea{resize:vertical;min-height:160px;font-family:'Courier New',monospace;font-size:13px}
   label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}
@@ -63,7 +69,7 @@
   .modal-bg.open{display:flex}
   .modal{background:#fff;border-radius:12px;max-width:780px;width:100%;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
   .modal h2{margin-top:0}
-  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap}
   .row{display:flex;gap:10px;flex-wrap:wrap}
   .row > *{flex:1;min-width:180px}
   .help{background:#f5efe2;border-left:3px solid var(--accent-2);padding:10px 14px;border-radius:6px;
@@ -81,10 +87,6 @@
   .stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
   .stat .num{font-size:24px;font-weight:600;color:var(--accent)}
   .stat .lbl{font-size:12px;color:var(--muted)}
-  .auto-save{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-left:auto}
-  .auto-save .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
-  .auto-save.dirty .dot{background:var(--warn)}
-  .auto-save.dirty{color:var(--warn)}
   .picker-list{max-height:300px;overflow-y:auto;border:1px solid var(--line);border-radius:8px;padding:6px;background:#fafafa}
   .picker-row{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:6px}
   .picker-row:hover{background:#fff}
@@ -94,6 +96,7 @@
     main{padding:12px}
     nav button{padding:6px 10px;font-size:13px}
     header h1{font-size:18px}
+    .sync-pill{margin-left:0;margin-top:4px}
   }
 </style>
 </head>
@@ -105,12 +108,16 @@
     <button data-tab="setlists">🎵 Set-lister</button>
     <button data-tab="data">💾 Data</button>
     <button data-tab="help">❓ Hjelp</button>
-    <span class="auto-save" id="autoSave"><span class="dot"></span><span id="autoSaveText">Lagret</span></span>
+    <span class="sync-pill local" id="syncPill" title="Klikk for GitHub-innstillinger">
+      <span class="dot"></span><span id="syncPillText">Lokal</span>
+    </span>
   </nav>
 </header>
 
 <main>
-  <!-- ========= SONGS ========= -->
+  <div id="banner"></div>
+
+  <!-- SONGS -->
   <section id="tab-songs" class="tab active">
     <div class="toolbar">
       <button class="btn" id="btnNewSong">＋ Ny sang</button>
@@ -119,7 +126,7 @@
     <div id="songList"></div>
   </section>
 
-  <!-- ========= SETLISTS ========= -->
+  <!-- SETLISTS -->
   <section id="tab-setlists" class="tab">
     <div class="toolbar">
       <button class="btn" id="btnNewSetlist">＋ Ny set-list</button>
@@ -127,7 +134,7 @@
     <div id="setlistList"></div>
   </section>
 
-  <!-- ========= DATA ========= -->
+  <!-- DATA -->
   <section id="tab-data" class="tab">
     <div class="stats">
       <div class="stat"><div class="num" id="statSongs">0</div><div class="lbl">sanger</div></div>
@@ -136,38 +143,20 @@
     </div>
 
     <div class="card">
-      <h3 style="margin-top:0">Lagre / hente database</h3>
+      <h3 style="margin-top:0">🐙 GitHub-synk <span id="ghAutoDetected" style="font-size:12px;color:var(--muted);font-weight:400"></span></h3>
       <p style="color:var(--muted);font-size:14px">
-        Appen lagrer automatisk i nettleserens lokale lager, men for å bruke samme database på flere
-        enheter må du eksportere til en JSON-fil og lagre den på Google Drive. På en annen enhet
-        importerer du den samme filen.
-      </p>
-      <div class="row">
-        <button class="btn" id="btnExport">⬇️ Last ned database (JSON)</button>
-        <button class="btn secondary" id="btnImport">⬆️ Last opp database (JSON)</button>
-        <input type="file" id="fileImport" accept=".json,application/json" hidden />
-      </div>
-      <div class="help">
-        <b>Tips:</b> Lagre <code>sangdatabase.json</code> i samme mappe på Drive som
-        <code>Allsang.html</code>. Etter du har lagt til/endret sanger, last ned JSON-fila igjen og
-        last opp på Drive (overskriv den gamle).
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 style="margin-top:0">🐙 GitHub-synk</h3>
-      <p style="color:var(--muted);font-size:14px">
-        La appen lagre databasen automatisk i en JSON-fil i ditt eget GitHub-repo. Da synkes alt
-        mellom enhetene dine uten at du må eksportere/importere manuelt.
+        Lagre databasen automatisk i ditt eget GitHub-repo, så er den i synk på alle enhetene dine.
+        Brukernavn og repo blir <b>oppdaget automatisk fra URL-en</b> hvis appen kjører på GitHub Pages –
+        du må kun fylle inn <b>tokenet</b> på hver enhet.
       </p>
       <div class="row">
         <div>
           <label>GitHub-brukernavn</label>
-          <input type="text" id="ghOwner" placeholder="f.eks. erlandersen" autocomplete="off" />
+          <input type="text" id="ghOwner" placeholder="oppdages automatisk" autocomplete="off" />
         </div>
         <div>
           <label>Repo-navn</label>
-          <input type="text" id="ghRepo" placeholder="f.eks. allsang" autocomplete="off" />
+          <input type="text" id="ghRepo" placeholder="oppdages automatisk" autocomplete="off" />
         </div>
       </div>
       <div class="row">
@@ -180,30 +169,42 @@
           <input type="text" id="ghPath" value="sangdatabase.json" autocomplete="off" />
         </div>
       </div>
-      <label>Personal Access Token (PAT)
+      <label>Personal Access Token (PAT) – må fylles inn på hver enhet
         <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener" style="font-size:12px;margin-left:6px;color:var(--accent)">Opprett ny ↗</a>
       </label>
       <input type="password" id="ghToken" placeholder="github_pat_… eller ghp_…" autocomplete="off" />
       <label style="display:flex;align-items:center;gap:8px;margin-top:10px">
         <input type="checkbox" id="ghAutoSync" />
-        Auto-synk: hent ved oppstart, lagre automatisk ved endringer (3 sek forsinkelse)
+        Auto-synk: hent ved oppstart og lagre automatisk ved endringer (anbefales)
       </label>
       <div class="row" style="margin-top:12px">
-        <button class="btn secondary" id="btnGhSaveSettings">💾 Lagre innstillinger</button>
+        <button class="btn secondary" id="btnGhTest">🔌 Test forbindelse</button>
         <button class="btn" id="btnGhPull">⬇️ Hent fra GitHub</button>
         <button class="btn" id="btnGhPush" style="background:var(--ok)">⬆️ Lagre til GitHub</button>
       </div>
       <div id="ghStatus" style="margin-top:10px;font-size:13px;color:var(--muted);min-height:20px"></div>
       <div class="help">
-        <b>Slik oppretter du en token (engangsoppsett):</b>
+        <b>Slik oppretter du en token (én gang per enhet):</b>
         <ol style="margin:6px 0 0 18px;padding:0">
           <li>Gå til <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a></li>
           <li>«Generate new token» → velg <b>Fine-grained personal access token</b></li>
           <li>Repository access: <b>Only select repositories</b> → velg ditt allsang-repo</li>
           <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
-          <li>Klikk «Generate token», kopier det og lim inn i feltet over</li>
+          <li>Klikk «Generate token», kopier det og lim inn over</li>
         </ol>
-        <p style="margin:8px 0 0 0">⚠️ <b>Tokenet lagres bare lokalt</b> i denne nettleseren (i localStorage). Del det aldri med noen, og IKKE legg det inn i selve repoet.</p>
+        <p style="margin:8px 0 0 0">⚠️ <b>Hver enhet trenger sin egen token</b> – av sikkerhetshensyn lagres tokenet kun lokalt i hver nettleser.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Manuell eksport/import</h3>
+      <p style="color:var(--muted);font-size:14px">
+        Nyttig som sikkerhetskopi, eller hvis du vil flytte databasen uten GitHub.
+      </p>
+      <div class="row">
+        <button class="btn" id="btnExport">⬇️ Last ned database (JSON)</button>
+        <button class="btn secondary" id="btnImport">⬆️ Last opp database (JSON)</button>
+        <input type="file" id="fileImport" accept=".json,application/json" hidden />
       </div>
     </div>
 
@@ -214,30 +215,26 @@
     </div>
   </section>
 
-  <!-- ========= HELP ========= -->
+  <!-- HELP -->
   <section id="tab-help" class="tab">
     <div class="card">
       <h2 style="margin-top:0">Slik bruker du Allsang-appen</h2>
       <h3>1. Legge til sanger</h3>
       <p>Trykk <b>＋ Ny sang</b>, fyll inn artist og tittel. Bruk søkeknappene
-      til å åpne søk etter tekst og besifring i nytt vindu. Kopier teksten du finner og lim inn i
-      tekstfeltet. Lagre.</p>
+      til å åpne søk etter tekst og besifring i nytt vindu. Kopier teksten du finner og lim inn.</p>
       <h3>2. Lage en set-list</h3>
-      <p>Gå til <b>Set-lister</b>, opprett en ny, gi den et navn (f.eks. "17. mai i hagen") og legg
-      til sanger. Bruk pilene til å endre rekkefølge.</p>
+      <p>Gå til <b>Set-lister</b>, opprett en ny, gi den et navn og legg til sanger. Bruk pilene til å endre rekkefølge.</p>
       <h3>3. Lage PDF</h3>
-      <p>Inne i en set-list trykker du <b>📄 Lag PDF</b>. Du får en ferdig sangbok med innholdsfortegnelse,
-      sidetall og én sang per side (lange sanger fortsetter på neste side).</p>
-      <h3>4. Synke mellom enheter</h3>
-      <p>Bruk <b>Data</b>-fanen til å laste ned databasen som JSON. Legg fila på Google Drive.
-      På en annen enhet åpner du <code>Allsang.html</code> fra Drive og importerer JSON-fila.</p>
-      <h3>5. Sikkerhetskopi</h3>
-      <p>Det er lurt å laste ned database-fila etter en arbeidsøkt slik at du har en kopi.</p>
+      <p>Trykk <b>📄 Lag PDF</b> i en set-list. PDF får forside, innholdsfortegnelse, sidetall og én sang per side.</p>
+      <h3>4. GitHub-synk på flere enheter</h3>
+      <p>På hver ny enhet: åpne appen, gå til <b>Data</b> → fyll inn tokenet (brukernavn/repo oppdages
+      automatisk), hak av <b>Auto-synk</b>, trykk <b>Lagre til GitHub</b> første gang. Etterpå
+      synkroniseres alt automatisk på den enheten.</p>
     </div>
   </section>
 </main>
 
-<!-- ========= MODAL: SONG EDITOR ========= -->
+<!-- SONG MODAL -->
 <div class="modal-bg" id="modalSong">
   <div class="modal">
     <h2 id="modalSongTitle">Ny sang</h2>
@@ -251,21 +248,16 @@
         <input type="text" id="songTitle" placeholder="F.eks. Eg ser" />
       </div>
     </div>
-
     <label>Søk etter tekst og besifring på nett</label>
     <div class="lookup-buttons" id="lookupButtons"></div>
     <div class="help" style="margin-top:6px">
-      Klikk en knapp for å åpne søk i ny fane. Marker tekst+besifring, kopier (Ctrl+C / Cmd+C) og
-      lim inn nedenfor (Ctrl+V / Cmd+V).
+      Klikk en knapp for å åpne søk i ny fane. Marker tekst+besifring, kopier og lim inn nedenfor.
     </div>
-
     <label>Sangtekst (gjerne med besifring over linjene)</label>
     <textarea id="songLyrics" placeholder="Lim inn sangteksten her..."></textarea>
-
     <label style="display:flex;align-items:center;gap:8px;margin-top:10px">
-      <input type="checkbox" id="songHasChords" /> Inneholder besifring (rendres med fast bredde i PDF for å bevare akkordplassering)
+      <input type="checkbox" id="songHasChords" /> Inneholder besifring (monospace i PDF)
     </label>
-
     <div class="modal-actions">
       <button class="btn danger" id="btnDeleteSong" style="margin-right:auto;display:none">Slett</button>
       <button class="btn secondary" id="btnCancelSong">Avbryt</button>
@@ -274,7 +266,7 @@
   </div>
 </div>
 
-<!-- ========= MODAL: SETLIST EDITOR ========= -->
+<!-- SETLIST MODAL -->
 <div class="modal-bg" id="modalSetlist">
   <div class="modal" style="max-width:900px">
     <h2 id="modalSetlistTitle">Ny set-list</h2>
@@ -288,7 +280,6 @@
         <input type="text" id="setlistDesc" placeholder="F.eks. Allsang i hagen" />
       </div>
     </div>
-
     <div class="row" style="align-items:flex-start;margin-top:14px">
       <div style="flex:1">
         <label>Sanger i set-listen <span id="setlistSongCount" style="color:var(--muted)"></span></label>
@@ -300,19 +291,12 @@
         <div class="picker-list" id="pickerList"></div>
       </div>
     </div>
-
     <div class="pdf-options">
       <h4 style="margin:0 0 6px 0">PDF-innstillinger</h4>
       <div class="row">
-        <label style="display:flex;align-items:center;gap:6px">
-          <input type="checkbox" id="pdfShowArtist" checked /> Vis artist på sangside
-        </label>
-        <label style="display:flex;align-items:center;gap:6px">
-          <input type="checkbox" id="pdfShowTOC" checked /> Inkluder innholdsfortegnelse
-        </label>
-        <label style="display:flex;align-items:center;gap:6px">
-          <input type="checkbox" id="pdfShowCover" checked /> Inkluder forside
-        </label>
+        <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="pdfShowArtist" checked /> Vis artist</label>
+        <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="pdfShowTOC" checked /> Innholdsfortegnelse</label>
+        <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="pdfShowCover" checked /> Forside</label>
         <label style="display:flex;align-items:center;gap:6px">
           Skriftstørrelse:
           <select id="pdfFontSize" style="width:auto">
@@ -325,7 +309,6 @@
         </label>
       </div>
     </div>
-
     <div class="modal-actions">
       <button class="btn danger" id="btnDeleteSetlist" style="margin-right:auto;display:none">Slett</button>
       <button class="btn secondary" id="btnCancelSetlist">Avbryt</button>
@@ -335,50 +318,293 @@
   </div>
 </div>
 
-<!-- jsPDF for PDF generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-/* ===========================================================================
-   Allsang – sangbok-app
-   Lagrer data i localStorage, eksport/import som JSON.
-   PDF genereres med jsPDF.
-   =========================================================================== */
-
+/* =========================================================================
+   Allsang – sangbok-app med GitHub-synk
+   ========================================================================= */
 const STORAGE_KEY = 'allsang_v1';
-let DB = { version: 1, songs: [], setlists: [] };
+const GH_KEY = 'allsang_github_v1';
+let DB = { version:1, songs:[], setlists:[] };
 let dirty = false;
 
-/* ---------- Persistence ---------- */
+/* ----- Persistens ----- */
 function loadDB(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){ DB = JSON.parse(raw); }
-    if(!DB.songs) DB.songs = [];
-    if(!DB.setlists) DB.setlists = [];
-  }catch(e){ console.error(e); }
+  try{ const raw = localStorage.getItem(STORAGE_KEY); if(raw) DB = JSON.parse(raw); }catch(e){}
+  if(!DB.songs) DB.songs = [];
+  if(!DB.setlists) DB.setlists = [];
 }
 function saveDB(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
   dirty = true;
-  updateAutoSave();
+  refreshSyncPill();
   scheduleGhPush();
-}
-function updateAutoSave(){
-  const el = document.getElementById('autoSave');
-  const txt = document.getElementById('autoSaveText');
-  if(dirty){
-    el.classList.add('dirty');
-    txt.textContent = 'Endret – husk å eksportere';
-  } else {
-    el.classList.remove('dirty');
-    txt.textContent = 'Lagret lokalt';
-  }
 }
 function uid(){ return 'id-' + Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
 function todayISO(){ return new Date().toISOString().slice(0,10); }
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-/* ---------- Tab navigation ---------- */
+/* ----- GitHub-synk ----- */
+let ghSettings = { owner:'', repo:'', branch:'main', path:'sangdatabase.json', token:'', autoSync:false };
+let ghSha = null;
+let ghSyncTimer = null;
+let ghBusy = false;
+let ghLastError = '';
+
+function autoDetectGh(){
+  // GitHub Pages: USER.github.io/REPO/  ELLER  USER.github.io/
+  const host = window.location.hostname || '';
+  const path = window.location.pathname || '';
+  if(host.endsWith('.github.io')){
+    const owner = host.replace('.github.io','');
+    const segs = path.split('/').filter(Boolean);
+    const repo = segs.length > 0 ? segs[0] : `${owner}.github.io`;
+    return { owner, repo };
+  }
+  return null;
+}
+
+function loadGhSettings(){
+  try{ const raw = localStorage.getItem(GH_KEY); if(raw) Object.assign(ghSettings, JSON.parse(raw)); }catch(e){}
+  const detected = autoDetectGh();
+  if(detected){
+    if(!ghSettings.owner) ghSettings.owner = detected.owner;
+    if(!ghSettings.repo)  ghSettings.repo  = detected.repo;
+    document.getElementById('ghAutoDetected').textContent =
+      `(oppdaget: ${detected.owner}/${detected.repo})`;
+  }
+  document.getElementById('ghOwner').value  = ghSettings.owner || '';
+  document.getElementById('ghRepo').value   = ghSettings.repo || '';
+  document.getElementById('ghBranch').value = ghSettings.branch || 'main';
+  document.getElementById('ghPath').value   = ghSettings.path || 'sangdatabase.json';
+  document.getElementById('ghToken').value  = ghSettings.token || '';
+  document.getElementById('ghAutoSync').checked = !!ghSettings.autoSync;
+}
+function saveGhSettings(){
+  ghSettings = {
+    owner:    document.getElementById('ghOwner').value.trim(),
+    repo:     document.getElementById('ghRepo').value.trim(),
+    branch:   document.getElementById('ghBranch').value.trim() || 'main',
+    path:     document.getElementById('ghPath').value.trim()   || 'sangdatabase.json',
+    token:    document.getElementById('ghToken').value.trim(),
+    autoSync: document.getElementById('ghAutoSync').checked
+  };
+  localStorage.setItem(GH_KEY, JSON.stringify(ghSettings));
+  refreshSyncPill();
+  renderBanner();
+}
+function ghReady(){ return ghSettings.owner && ghSettings.repo && ghSettings.token; }
+
+function setGhStatus(msg, type){
+  const el = document.getElementById('ghStatus');
+  if(!el) return;
+  const colors = {ok:'var(--ok)', warn:'var(--warn)', err:'var(--danger)'};
+  el.style.color = colors[type] || 'var(--muted)';
+  el.textContent = msg;
+  if(type === 'err') ghLastError = msg;
+  if(type === 'ok')  ghLastError = '';
+  refreshSyncPill();
+}
+
+function utf8ToB64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for(let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64ToUtf8(b64){
+  const bin = atob((b64||'').replace(/\s/g,''));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bytes);
+}
+function ghContentUrl(withRef){
+  const base = `https://api.github.com/repos/${encodeURIComponent(ghSettings.owner)}/${encodeURIComponent(ghSettings.repo)}/contents/${ghSettings.path.split('/').map(encodeURIComponent).join('/')}`;
+  return withRef ? `${base}?ref=${encodeURIComponent(ghSettings.branch)}` : base;
+}
+function ghHeaders(){
+  return {
+    Authorization: `Bearer ${ghSettings.token}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+
+async function ghTest(){
+  saveGhSettings();
+  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
+  setGhStatus('Tester forbindelse…');
+  try{
+    // 1) Sjekk at token er gyldig
+    const u = await fetch('https://api.github.com/user', { headers: ghHeaders() });
+    if(u.status === 401) throw new Error('Tokenet er ugyldig eller utløpt.');
+    if(!u.ok) throw new Error(`Token-sjekk feilet: HTTP ${u.status}`);
+    const user = await u.json();
+    // 2) Sjekk at repo finnes og at token har tilgang
+    const rUrl = `https://api.github.com/repos/${encodeURIComponent(ghSettings.owner)}/${encodeURIComponent(ghSettings.repo)}`;
+    const r = await fetch(rUrl, { headers: ghHeaders() });
+    if(r.status === 404) throw new Error(`Fant ikke repoet ${ghSettings.owner}/${ghSettings.repo}. Sjekk at tokenet har tilgang.`);
+    if(!r.ok) throw new Error(`Repo-sjekk feilet: HTTP ${r.status}`);
+    const repoInfo = await r.json();
+    if(!repoInfo.permissions || !repoInfo.permissions.push){
+      throw new Error('Tokenet mangler skrivetilgang. Sjekk at det har Contents: Read and write.');
+    }
+    setGhStatus(`✅ Forbindelse OK – logget inn som ${user.login}, har skrivetilgang til ${repoInfo.full_name}`, 'ok');
+  }catch(err){
+    setGhStatus('❌ ' + err.message, 'err');
+  }
+}
+
+async function ghPull(){
+  saveGhSettings();
+  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
+  if(ghBusy) return;
+  ghBusy = true; refreshSyncPill();
+  setGhStatus('Henter database fra GitHub…');
+  try{
+    const r = await fetch(ghContentUrl(true), { headers: ghHeaders() });
+    if(r.status === 404){
+      setGhStatus('Fila finnes ikke i repoet ennå – trykk «Lagre til GitHub» for å opprette.', 'warn');
+      ghSha = null; return;
+    }
+    if(r.status === 401 || r.status === 403){
+      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet er gyldig og har Contents: Read and write.`);
+    }
+    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
+    const data = await r.json();
+    const text = b64ToUtf8(data.content);
+    const parsed = JSON.parse(text);
+    if(!parsed.songs || !Array.isArray(parsed.songs)) throw new Error('JSON-fila mangler songs[]');
+    if(!parsed.setlists) parsed.setlists = [];
+    DB = parsed;
+    ghSha = data.sha;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+    dirty = false;
+    renderSongs(); renderSetlists(); updateStats();
+    setGhStatus(`✅ Hentet ${DB.songs.length} sanger og ${DB.setlists.length} set-lister`, 'ok');
+  }catch(err){
+    setGhStatus('❌ ' + err.message, 'err');
+  } finally { ghBusy = false; refreshSyncPill(); renderBanner(); }
+}
+
+async function ghPush(){
+  saveGhSettings();
+  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
+  if(ghBusy){ scheduleGhPush(); return; }
+  ghBusy = true; refreshSyncPill();
+  setGhStatus('Lagrer til GitHub…');
+  try{
+    if(!ghSha){
+      const ck = await fetch(ghContentUrl(true), { headers: ghHeaders() });
+      if(ck.ok){ ghSha = (await ck.json()).sha; }
+      else if(ck.status !== 404){
+        throw new Error(`Kunne ikke sjekke fila: HTTP ${ck.status}`);
+      }
+    }
+    const body = {
+      message: `Allsang: oppdatert sangdatabase (${DB.songs.length} sanger, ${DB.setlists.length} set-lister)`,
+      content: utf8ToB64(JSON.stringify(DB, null, 2)),
+      branch: ghSettings.branch
+    };
+    if(ghSha) body.sha = ghSha;
+    const r = await fetch(ghContentUrl(false), {
+      method: 'PUT',
+      headers: { ...ghHeaders(), 'Content-Type':'application/json' },
+      body: JSON.stringify(body)
+    });
+    if(r.status === 409 || r.status === 422){
+      ghSha = null;
+      throw new Error('Konflikt: fila ble endret eksternt. Trykk «Hent fra GitHub», sjekk endringer, og lagre på nytt.');
+    }
+    if(r.status === 401 || r.status === 403){
+      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet har Contents: Read and write.`);
+    }
+    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
+    const data = await r.json();
+    ghSha = data.content.sha;
+    dirty = false;
+    setGhStatus(`✅ Lagret til GitHub kl. ${new Date().toLocaleTimeString('no-NO')}`, 'ok');
+  }catch(err){
+    setGhStatus('❌ ' + err.message, 'err');
+  } finally { ghBusy = false; refreshSyncPill(); renderBanner(); }
+}
+
+function scheduleGhPush(){
+  if(!ghSettings.autoSync || !ghReady()) return;
+  clearTimeout(ghSyncTimer);
+  setGhStatus('✏️ Endring registrert – lagrer om 3 sekunder…');
+  refreshSyncPill();
+  ghSyncTimer = setTimeout(()=>{ ghPush(); }, 3000);
+}
+
+/* Forsøk å flushe ved navigering bort */
+window.addEventListener('beforeunload', (e)=>{
+  if(ghSettings.autoSync && ghReady() && dirty){
+    // Bruk sendBeacon-aktig synkron strategi: bare advar bruker
+    e.preventDefault();
+    e.returnValue = 'Endringer er ikke lagret til GitHub ennå.';
+    // Forsøk push (async, kan ikke ventes på her)
+    ghPush();
+    return e.returnValue;
+  }
+});
+
+/* ----- Sync-pille i toppen ----- */
+function refreshSyncPill(){
+  const pill = document.getElementById('syncPill');
+  const txt  = document.getElementById('syncPillText');
+  pill.classList.remove('ok','pending','err','local');
+  if(!ghSettings.autoSync || !ghReady()){
+    pill.classList.add('local');
+    txt.textContent = ghReady() ? 'Synk av' : 'Lokal (ikke synket)';
+    return;
+  }
+  if(ghLastError){ pill.classList.add('err'); txt.textContent = 'Feil – sjekk Data'; return; }
+  if(ghBusy || dirty){ pill.classList.add('pending'); txt.textContent = dirty ? 'Endret – lagrer…' : 'Lagrer…'; return; }
+  pill.classList.add('ok');
+  txt.textContent = 'Synket til GitHub';
+}
+document.getElementById('syncPill').addEventListener('click', ()=>{
+  document.querySelector('nav button[data-tab="data"]').click();
+  document.getElementById('ghToken').focus();
+});
+
+/* ----- Banner for førstegangsoppsett ----- */
+function renderBanner(){
+  const el = document.getElementById('banner');
+  el.innerHTML = '';
+  // Vis varsel hvis appen kjører på github.io men ingen token er konfigurert
+  const detected = autoDetectGh();
+  const hasLocalChanges = DB.songs.length > 0 || DB.setlists.length > 0;
+  if(detected && !ghSettings.token){
+    el.innerHTML = `
+      <div class="banner">
+        <span class="icon">🐙</span>
+        <div style="flex:1">
+          <b>GitHub-synk er ikke aktivert på denne enheten ennå.</b><br>
+          <span style="font-size:13px">For at sangene skal lagres på GitHub må du lime inn en Personal Access Token i Data-fanen. Brukernavn og repo (<code>${detected.owner}/${detected.repo}</code>) er allerede oppdaget.</span>
+        </div>
+        <button id="bannerSetup">Sett opp nå</button>
+      </div>`;
+    document.getElementById('bannerSetup').addEventListener('click', ()=>{
+      document.querySelector('nav button[data-tab="data"]').click();
+      document.getElementById('ghToken').focus();
+    });
+  } else if(ghLastError){
+    el.innerHTML = `
+      <div class="banner error">
+        <span class="icon">⚠️</span>
+        <div style="flex:1">
+          <b>GitHub-synk feilet:</b> <span style="font-size:13px">${escapeHtml(ghLastError)}</span>
+        </div>
+        <button id="bannerFix">Fiks i Data</button>
+      </div>`;
+    document.getElementById('bannerFix').addEventListener('click', ()=>{
+      document.querySelector('nav button[data-tab="data"]').click();
+    });
+  }
+}
+
+/* ----- Tabs ----- */
 document.querySelectorAll('nav button[data-tab]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('nav button[data-tab]').forEach(b=>b.classList.remove('active'));
@@ -389,7 +615,7 @@ document.querySelectorAll('nav button[data-tab]').forEach(btn=>{
   });
 });
 
-/* ---------- Songs UI ---------- */
+/* ----- Songs UI ----- */
 const songListEl = document.getElementById('songList');
 const searchSongsEl = document.getElementById('searchSongs');
 let editingSongId = null;
@@ -399,35 +625,25 @@ function renderSongs(){
   const list = DB.songs
     .filter(s => !q || (s.artist+' '+s.title).toLowerCase().includes(q))
     .sort((a,b)=> (a.artist+a.title).localeCompare(b.artist+b.title,'no'));
-
   if(list.length===0){
     songListEl.innerHTML = '<div class="empty">Ingen sanger ennå. Trykk «＋ Ny sang» for å legge til den første.</div>';
     return;
   }
   songListEl.innerHTML = list.map(s => {
-    const chordBadge = s.hasChords
-      ? '<span class="badge has-chords">Med besifring</span>'
-      : '<span class="badge no-chords">Bare tekst</span>';
+    const badge = s.hasChords ? '<span class="badge has-chords">Med besifring</span>' : '<span class="badge no-chords">Bare tekst</span>';
     const lines = (s.lyrics||'').split('\n').length;
     return `<div class="card song-row" data-id="${s.id}">
       <div class="song-info">
         <div class="song-title">${escapeHtml(s.title||'(uten tittel)')}</div>
         <div class="song-artist">${escapeHtml(s.artist||'(ukjent artist)')}</div>
       </div>
-      <div class="song-meta">
-        ${chordBadge}<br>
-        <span style="color:var(--muted)">${lines} linjer</span>
-      </div>
+      <div class="song-meta">${badge}<br><span style="color:var(--muted)">${lines} linjer</span></div>
     </div>`;
   }).join('');
-
-  songListEl.querySelectorAll('.song-row').forEach(r=>{
-    r.addEventListener('click', ()=> openSongModal(r.dataset.id));
-  });
+  songListEl.querySelectorAll('.song-row').forEach(r=>r.addEventListener('click', ()=>openSongModal(r.dataset.id)));
 }
 searchSongsEl.addEventListener('input', renderSongs);
-
-document.getElementById('btnNewSong').addEventListener('click', ()=> openSongModal(null));
+document.getElementById('btnNewSong').addEventListener('click', ()=>openSongModal(null));
 
 function openSongModal(id){
   editingSongId = id;
@@ -441,20 +657,15 @@ function openSongModal(id){
     document.getElementById('songLyrics').value = s.lyrics||'';
     document.getElementById('songHasChords').checked = !!s.hasChords;
   } else {
-    document.getElementById('songArtist').value = '';
-    document.getElementById('songTitle').value = '';
-    document.getElementById('songLyrics').value = '';
+    ['songArtist','songTitle','songLyrics'].forEach(i=>document.getElementById(i).value='');
     document.getElementById('songHasChords').checked = false;
   }
   updateLookupButtons();
   document.getElementById('modalSong').classList.add('open');
   document.getElementById('songArtist').focus();
 }
-function closeSongModal(){
-  document.getElementById('modalSong').classList.remove('open');
-}
+function closeSongModal(){ document.getElementById('modalSong').classList.remove('open'); }
 document.getElementById('btnCancelSong').addEventListener('click', closeSongModal);
-
 document.getElementById('btnSaveSong').addEventListener('click', ()=>{
   const artist = document.getElementById('songArtist').value.trim();
   const title  = document.getElementById('songTitle').value.trim();
@@ -469,7 +680,6 @@ document.getElementById('btnSaveSong').addEventListener('click', ()=>{
   }
   saveDB(); renderSongs(); closeSongModal();
 });
-
 document.getElementById('btnDeleteSong').addEventListener('click', ()=>{
   if(!editingSongId) return;
   if(!confirm('Slette denne sangen? Den fjernes også fra alle set-lister.')) return;
@@ -477,11 +687,7 @@ document.getElementById('btnDeleteSong').addEventListener('click', ()=>{
   DB.setlists.forEach(sl => sl.songIds = sl.songIds.filter(id=>id!==editingSongId));
   saveDB(); renderSongs(); renderSetlists(); closeSongModal();
 });
-
-/* Auto-fill lookup buttons when artist/title change */
-['songArtist','songTitle'].forEach(id=>{
-  document.getElementById(id).addEventListener('input', updateLookupButtons);
-});
+['songArtist','songTitle'].forEach(id=>document.getElementById(id).addEventListener('input', updateLookupButtons));
 function updateLookupButtons(){
   const artist = document.getElementById('songArtist').value.trim();
   const title  = document.getElementById('songTitle').value.trim();
@@ -495,14 +701,13 @@ function updateLookupButtons(){
     <a href="https://www.azchords.com/search.php?search=${q}&type=songs" target="_blank" rel="noopener">🎵 AZChords</a>
     <a href="https://chordify.net/search/${q}" target="_blank" rel="noopener">🎶 Chordify</a>
     <a href="https://www.google.com/search?q=site%3Aviseboka.no+${q}" target="_blank" rel="noopener">🇳🇴 Viseboka</a>
-    <a href="https://www.google.com/search?q=${q}+sangtekst" target="_blank" rel="noopener">📝 Bare tekst (norsk)</a>
-  `;
+    <a href="https://www.google.com/search?q=${q}+sangtekst" target="_blank" rel="noopener">📝 Bare tekst (norsk)</a>`;
 }
 
-/* ---------- Setlists UI ---------- */
+/* ----- Setlists UI ----- */
 const setlistListEl = document.getElementById('setlistList');
 let editingSetlistId = null;
-let workingSetlist = null; // copy under edit
+let workingSetlist = null;
 
 function renderSetlists(){
   const list = DB.setlists.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','no'));
@@ -528,9 +733,7 @@ function renderSetlists(){
     </div>`;
   }).join('');
   setlistListEl.querySelectorAll('.card').forEach(card=>{
-    card.querySelector('[data-act="edit"]').addEventListener('click', e=>{
-      e.stopPropagation(); openSetlistModal(card.dataset.id);
-    });
+    card.querySelector('[data-act="edit"]').addEventListener('click', e=>{ e.stopPropagation(); openSetlistModal(card.dataset.id); });
     card.querySelector('[data-act="pdf"]').addEventListener('click', e=>{
       e.stopPropagation();
       const sl = DB.setlists.find(x=>x.id===card.dataset.id);
@@ -539,8 +742,7 @@ function renderSetlists(){
     card.addEventListener('click', ()=> openSetlistModal(card.dataset.id));
   });
 }
-
-document.getElementById('btnNewSetlist').addEventListener('click', ()=> openSetlistModal(null));
+document.getElementById('btnNewSetlist').addEventListener('click', ()=>openSetlistModal(null));
 
 function openSetlistModal(id){
   editingSetlistId = id;
@@ -558,16 +760,12 @@ function openSetlistModal(id){
   document.getElementById('modalSetlist').classList.add('open');
   document.getElementById('setlistName').focus();
 }
-function closeSetlistModal(){
-  document.getElementById('modalSetlist').classList.remove('open');
-  workingSetlist = null;
-}
+function closeSetlistModal(){ document.getElementById('modalSetlist').classList.remove('open'); workingSetlist = null; }
 document.getElementById('btnCancelSetlist').addEventListener('click', closeSetlistModal);
 
 function renderSetlistEditor(){
   const songsEl = document.getElementById('setlistSongs');
-  document.getElementById('setlistSongCount').textContent =
-    workingSetlist.songIds.length ? `(${workingSetlist.songIds.length})` : '';
+  document.getElementById('setlistSongCount').textContent = workingSetlist.songIds.length ? `(${workingSetlist.songIds.length})` : '';
   if(workingSetlist.songIds.length===0){
     songsEl.innerHTML = '<div class="empty" style="padding:14px">Legg til sanger fra listen til høyre.</div>';
   } else {
@@ -585,27 +783,18 @@ function renderSetlistEditor(){
     }).join('');
     songsEl.querySelectorAll('.setlist-song').forEach(row=>{
       const i = parseInt(row.dataset.i,10);
-      row.querySelector('[data-act="up"]').addEventListener('click', ()=>{
-        if(i>0){ const a=workingSetlist.songIds; [a[i-1],a[i]]=[a[i],a[i-1]]; renderSetlistEditor(); }
-      });
-      row.querySelector('[data-act="down"]').addEventListener('click', ()=>{
-        const a = workingSetlist.songIds;
-        if(i<a.length-1){ [a[i],a[i+1]]=[a[i+1],a[i]]; renderSetlistEditor(); }
-      });
-      row.querySelector('[data-act="del"]').addEventListener('click', ()=>{
-        workingSetlist.songIds.splice(i,1); renderSetlistEditor();
-      });
+      row.querySelector('[data-act="up"]').addEventListener('click', ()=>{ if(i>0){ const a=workingSetlist.songIds; [a[i-1],a[i]]=[a[i],a[i-1]]; renderSetlistEditor(); }});
+      row.querySelector('[data-act="down"]').addEventListener('click', ()=>{ const a=workingSetlist.songIds; if(i<a.length-1){ [a[i],a[i+1]]=[a[i+1],a[i]]; renderSetlistEditor(); }});
+      row.querySelector('[data-act="del"]').addEventListener('click', ()=>{ workingSetlist.songIds.splice(i,1); renderSetlistEditor(); });
     });
   }
   renderPicker();
 }
-
 const pickerSearch = document.getElementById('pickerSearch');
 pickerSearch.addEventListener('input', renderPicker);
 function renderPicker(){
   const q = pickerSearch.value.toLowerCase().trim();
-  const list = DB.songs
-    .filter(s => !q || (s.artist+' '+s.title).toLowerCase().includes(q))
+  const list = DB.songs.filter(s => !q || (s.artist+' '+s.title).toLowerCase().includes(q))
     .sort((a,b)=>(a.artist+a.title).localeCompare(b.artist+b.title,'no'));
   const el = document.getElementById('pickerList');
   if(list.length===0){ el.innerHTML = '<div class="empty">Ingen sanger funnet.</div>'; return; }
@@ -619,13 +808,11 @@ function renderPicker(){
   el.querySelectorAll('.picker-row').forEach(r=>{
     r.querySelector('button').addEventListener('click', ()=>{
       if(!workingSetlist.songIds.includes(r.dataset.id)){
-        workingSetlist.songIds.push(r.dataset.id);
-        renderSetlistEditor();
+        workingSetlist.songIds.push(r.dataset.id); renderSetlistEditor();
       }
     });
   });
 }
-
 document.getElementById('btnSaveSetlist').addEventListener('click', ()=>{
   workingSetlist.name = document.getElementById('setlistName').value.trim();
   workingSetlist.description = document.getElementById('setlistDesc').value.trim();
@@ -638,16 +825,13 @@ document.getElementById('btnSaveSetlist').addEventListener('click', ()=>{
   }
   saveDB(); renderSetlists(); closeSetlistModal();
 });
-
 document.getElementById('btnDeleteSetlist').addEventListener('click', ()=>{
   if(!editingSetlistId) return;
   if(!confirm('Slette set-listen? Sangene beholdes.')) return;
   DB.setlists = DB.setlists.filter(x=>x.id!==editingSetlistId);
   saveDB(); renderSetlists(); closeSetlistModal();
 });
-
 document.getElementById('btnGeneratePDF').addEventListener('click', ()=>{
-  // Save first if not saved
   workingSetlist.name = document.getElementById('setlistName').value.trim();
   workingSetlist.description = document.getElementById('setlistDesc').value.trim();
   if(!workingSetlist.name){ alert('Set-listen må ha et navn før du kan lage PDF.'); return; }
@@ -661,11 +845,10 @@ document.getElementById('btnGeneratePDF').addEventListener('click', ()=>{
   generatePDF(workingSetlist, opts);
 });
 
-/* ---------- PDF generation ---------- */
+/* ----- PDF-generator ----- */
 async function generatePDF(setlist, opts){
   const songs = setlist.songIds.map(id => DB.songs.find(s=>s.id===id)).filter(Boolean);
   if(songs.length===0){ alert('Ingen sanger i set-listen.'); return; }
-
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({unit:'pt',format:'a4'});
   const PAGE_W = doc.internal.pageSize.getWidth();
@@ -673,418 +856,170 @@ async function generatePDF(setlist, opts){
   const MARGIN = 50;
   const CONTENT_W = PAGE_W - 2*MARGIN;
   const FOOTER_H = 30;
-  const HEADER_H = 60;
-  const BODY_TOP = MARGIN + HEADER_H;
   const BODY_BOTTOM = PAGE_H - MARGIN - FOOTER_H;
   const fontSize = opts.fontSize || 11;
   const lineGap = fontSize * 1.35;
-
-  /* Helpers */
-  function setFont(family, style, size){
-    doc.setFont(family, style||'normal');
-    doc.setFontSize(size);
-  }
-
-  /* --------- Pass 1: render songs, recording start pages ---------
-     We start with a blank page (will become page 1). After rendering,
-     we'll insert TOC/cover pages at the front.
-  */
-  const songStarts = []; // start page (1-indexed in song-only sequence) per song
-  // Page 1 of song sequence:
+  function setFont(f,s,sz){doc.setFont(f,s||'normal');doc.setFontSize(sz)}
+  const songStarts = [];
   let curPage = 1;
-
-  songs.forEach((song, idx)=>{
-    if(idx>0){ doc.addPage(); curPage++; }
+  songs.forEach((song,idx)=>{
+    if(idx>0){doc.addPage();curPage++;}
     songStarts.push(curPage);
-    renderSongPage(song);
-  });
-
-  function renderSongPage(song){
     let y = MARGIN;
-    // Header: title + artist
-    setFont('helvetica','bold', 18);
-    const titleLines = doc.splitTextToSize(song.title || '(uten tittel)', CONTENT_W);
-    doc.text(titleLines, MARGIN, y + 18);
-    y += 18 * titleLines.length + 4;
-
+    setFont('helvetica','bold',18);
+    const tl = doc.splitTextToSize(song.title||'(uten tittel)',CONTENT_W);
+    doc.text(tl,MARGIN,y+18); y += 18*tl.length+4;
     if(opts.showArtist && song.artist){
-      setFont('helvetica','italic', 12);
-      doc.setTextColor(100);
-      doc.text(song.artist, MARGIN, y + 12);
-      doc.setTextColor(0);
-      y += 16;
+      setFont('helvetica','italic',12);
+      doc.setTextColor(100); doc.text(song.artist,MARGIN,y+12); doc.setTextColor(0); y+=16;
     }
-    // Divider
-    doc.setDrawColor(200);
-    doc.line(MARGIN, y+8, PAGE_W-MARGIN, y+8);
-    y += 18;
-
-    // Lyrics body
+    doc.setDrawColor(200); doc.line(MARGIN,y+8,PAGE_W-MARGIN,y+8); y+=18;
     const lyrics = (song.lyrics||'').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
     const useMono = !!song.hasChords;
-    setFont(useMono?'courier':'helvetica','normal', fontSize);
-    // Split into lines, then wrap each
-    const allLines = [];
+    setFont(useMono?'courier':'helvetica','normal',fontSize);
+    const allLines=[];
     lyrics.split('\n').forEach(line=>{
-      if(line.length===0){ allLines.push(''); return; }
-      // For monospace lines (chords), don't wrap aggressively – split at whitespace
-      const wrapped = doc.splitTextToSize(line, CONTENT_W);
-      wrapped.forEach(w=>allLines.push(w));
+      if(line.length===0){allLines.push('');return;}
+      doc.splitTextToSize(line,CONTENT_W).forEach(w=>allLines.push(w));
     });
-
-    // Render lines, paginating as needed
     allLines.forEach(line=>{
-      if(y + lineGap > BODY_BOTTOM){
-        doc.addPage();
-        curPage++;
-        y = MARGIN;
-        // Continuation header
-        setFont('helvetica','italic', 10);
-        doc.setTextColor(120);
-        doc.text(`${song.title}${song.artist?' – '+song.artist:''} (forts.)`, MARGIN, y+10);
-        doc.setTextColor(0);
-        y += 24;
-        setFont(useMono?'courier':'helvetica','normal', fontSize);
+      if(y+lineGap > BODY_BOTTOM){
+        doc.addPage(); curPage++; y=MARGIN;
+        setFont('helvetica','italic',10); doc.setTextColor(120);
+        doc.text(`${song.title}${song.artist?' – '+song.artist:''} (forts.)`,MARGIN,y+10);
+        doc.setTextColor(0); y+=24;
+        setFont(useMono?'courier':'helvetica','normal',fontSize);
       }
-      doc.text(line, MARGIN, y + fontSize);
-      y += lineGap;
+      doc.text(line,MARGIN,y+fontSize); y+=lineGap;
     });
-  }
-
-  const totalSongPages = curPage; // pages used by songs (currently pages 1..totalSongPages)
-
-  /* --------- Compute TOC pages needed --------- */
+  });
   let coverPages = opts.showCover ? 1 : 0;
   let tocPages = 0;
   if(opts.showTOC){
-    const tocLineHeight = 18;
-    const tocBodyH = PAGE_H - 2*MARGIN - 60; // minus title space
-    const linesPerTOCPage = Math.floor(tocBodyH / tocLineHeight);
-    tocPages = Math.max(1, Math.ceil(songs.length / linesPerTOCPage));
+    const tocLineHeight=18;
+    const tocBodyH = PAGE_H-2*MARGIN-60;
+    const linesPerTOC = Math.floor(tocBodyH/tocLineHeight);
+    tocPages = Math.max(1, Math.ceil(songs.length/linesPerTOC));
   }
   const FRONT_PAGES = coverPages + tocPages;
-
-  /* --------- Insert front pages --------- */
-  // Insert FRONT_PAGES blank pages at the beginning
-  for(let i=0; i<FRONT_PAGES; i++){
-    doc.insertPage(1);
-  }
-
-  /* --------- Render cover page --------- */
+  for(let i=0;i<FRONT_PAGES;i++) doc.insertPage(1);
   if(opts.showCover){
     doc.setPage(1);
-    setFont('helvetica','bold', 28);
+    setFont('helvetica','bold',28);
     doc.text(setlist.name||'Sangbok', PAGE_W/2, PAGE_H/3, {align:'center'});
     if(setlist.description){
-      setFont('helvetica','italic', 14);
-      doc.setTextColor(80);
-      doc.text(setlist.description, PAGE_W/2, PAGE_H/3 + 36, {align:'center'});
-      doc.setTextColor(0);
+      setFont('helvetica','italic',14); doc.setTextColor(80);
+      doc.text(setlist.description, PAGE_W/2, PAGE_H/3+36, {align:'center'}); doc.setTextColor(0);
     }
-    setFont('helvetica','normal', 11);
-    doc.setTextColor(120);
+    setFont('helvetica','normal',11); doc.setTextColor(120);
     const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-    doc.text(`${songs.length} sanger – ${dateStr}`, PAGE_W/2, PAGE_H - MARGIN - 20, {align:'center'});
+    doc.text(`${songs.length} sanger – ${dateStr}`, PAGE_W/2, PAGE_H-MARGIN-20, {align:'center'});
     doc.setTextColor(0);
   }
-
-  /* --------- Render TOC pages --------- */
   if(opts.showTOC){
-    const tocLineHeight = 18;
-    const tocBodyH = PAGE_H - 2*MARGIN - 60;
-    const linesPerTOCPage = Math.floor(tocBodyH / tocLineHeight);
-
-    for(let p=0; p<tocPages; p++){
-      const pageNo = coverPages + 1 + p;
-      doc.setPage(pageNo);
-      setFont('helvetica','bold', 22);
-      doc.text(p===0 ? 'Innholdsfortegnelse' : 'Innholdsfortegnelse (forts.)', MARGIN, MARGIN + 22);
-
-      setFont('helvetica','normal', 12);
-      const startIdx = p*linesPerTOCPage;
-      const endIdx = Math.min(songs.length, startIdx + linesPerTOCPage);
-      let yy = MARGIN + 60;
-      for(let i=startIdx; i<endIdx; i++){
+    const tocLineHeight=18;
+    const tocBodyH = PAGE_H-2*MARGIN-60;
+    const linesPerTOC = Math.floor(tocBodyH/tocLineHeight);
+    for(let p=0;p<tocPages;p++){
+      doc.setPage(coverPages+1+p);
+      setFont('helvetica','bold',22);
+      doc.text(p===0?'Innholdsfortegnelse':'Innholdsfortegnelse (forts.)',MARGIN,MARGIN+22);
+      setFont('helvetica','normal',12);
+      const startIdx = p*linesPerTOC;
+      const endIdx = Math.min(songs.length, startIdx+linesPerTOC);
+      let yy = MARGIN+60;
+      for(let i=startIdx;i<endIdx;i++){
         const s = songs[i];
-        const targetPage = songStarts[i] + FRONT_PAGES; // adjusted
+        const targetPage = songStarts[i]+FRONT_PAGES;
         const left = `${i+1}. ${s.title}${s.artist?' – '+s.artist:''}`;
         const right = String(targetPage);
-        const leftTrunc = truncateForToc(doc, left, CONTENT_W - 60);
-        // Dotted leader
-        const leftWidth = doc.getTextWidth(leftTrunc);
-        const rightWidth = doc.getTextWidth(right);
-        doc.text(leftTrunc, MARGIN, yy);
-        doc.text(right, PAGE_W - MARGIN, yy, {align:'right'});
-        // dots
-        const dotsStart = MARGIN + leftWidth + 4;
-        const dotsEnd   = PAGE_W - MARGIN - rightWidth - 4;
-        if(dotsEnd > dotsStart){
+        const leftW = doc.getTextWidth(left);
+        const rightW = doc.getTextWidth(right);
+        doc.text(left, MARGIN, yy);
+        doc.text(right, PAGE_W-MARGIN, yy, {align:'right'});
+        const dotsStart = MARGIN+leftW+4;
+        const dotsEnd = PAGE_W-MARGIN-rightW-4;
+        if(dotsEnd>dotsStart){
           doc.setTextColor(150);
           let dx = dotsStart;
-          while(dx < dotsEnd){ doc.text('.', dx, yy); dx += 4; }
+          while(dx<dotsEnd){ doc.text('.',dx,yy); dx+=4; }
           doc.setTextColor(0);
         }
         yy += tocLineHeight;
       }
     }
   }
-
-  /* --------- Add page numbers in footer for every page --------- */
-  const totalPages = doc.internal.getNumberOfPages();
-  for(let p=1; p<=totalPages; p++){
+  const total = doc.internal.getNumberOfPages();
+  for(let p=1;p<=total;p++){
     doc.setPage(p);
-    setFont('helvetica','normal', 9);
-    doc.setTextColor(120);
+    setFont('helvetica','normal',9); doc.setTextColor(120);
     if(opts.showCover && p===1){
-      // No page number on cover
     } else {
-      doc.text(`${p} / ${totalPages}`, PAGE_W - MARGIN, PAGE_H - MARGIN/2, {align:'right'});
-      doc.text(setlist.name||'', MARGIN, PAGE_H - MARGIN/2);
+      doc.text(`${p} / ${total}`, PAGE_W-MARGIN, PAGE_H-MARGIN/2, {align:'right'});
+      doc.text(setlist.name||'', MARGIN, PAGE_H-MARGIN/2);
     }
     doc.setTextColor(0);
   }
-
-  /* --------- Save --------- */
-  const safeName = (setlist.name||'sangbok').replace(/[^\wæøåÆØÅ\s-]/g,'').replace(/\s+/g,'_');
-  doc.save(`${safeName}.pdf`);
+  const safe = (setlist.name||'sangbok').replace(/[^\wæøåÆØÅ\s-]/g,'').replace(/\s+/g,'_');
+  doc.save(`${safe}.pdf`);
 }
 
-function truncateForToc(doc, text, maxW){
-  if(doc.getTextWidth(text) <= maxW) return text;
-  let t = text;
-  while(t.length > 5 && doc.getTextWidth(t+'…') > maxW){
-    t = t.slice(0,-1);
-  }
-  return t + '…';
-}
-
-/* ---------- Data tab ---------- */
+/* ----- Stats + Data tab ----- */
 function updateStats(){
   document.getElementById('statSongs').textContent = DB.songs.length;
   document.getElementById('statSetlists').textContent = DB.setlists.length;
   document.getElementById('statChords').textContent = DB.songs.filter(s=>s.hasChords).length;
 }
-
 document.getElementById('btnExport').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify(DB,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `sangdatabase_${todayISO()}.json`;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-  dirty = false; updateAutoSave();
+  a.href = url; a.download = `sangdatabase_${todayISO()}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 });
-
-document.getElementById('btnImport').addEventListener('click', ()=>{
-  document.getElementById('fileImport').click();
-});
+document.getElementById('btnImport').addEventListener('click', ()=>document.getElementById('fileImport').click());
 document.getElementById('fileImport').addEventListener('change', async (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
+  const file = e.target.files[0]; if(!file) return;
   try{
     const text = await file.text();
     const data = JSON.parse(text);
     if(!data.songs || !Array.isArray(data.songs)) throw new Error('Mangler songs[]');
     if(!data.setlists) data.setlists = [];
     if(!confirm(`Importere ${data.songs.length} sanger og ${data.setlists.length} set-lister? Dette erstatter eksisterende data.`)) return;
-    DB = data;
-    saveDB();
+    DB = data; saveDB();
     renderSongs(); renderSetlists(); updateStats();
     alert('Import fullført!');
-  }catch(err){
-    alert('Kunne ikke lese fila: '+err.message);
-  } finally {
-    e.target.value = '';
-  }
+  }catch(err){ alert('Kunne ikke lese fila: '+err.message); }
+  finally{ e.target.value=''; }
 });
-
 document.getElementById('btnClearAll').addEventListener('click', ()=>{
   if(!confirm('Slette ALT? Dette kan ikke angres.')) return;
-  if(!confirm('Helt sikker? Eksporter først hvis du vil ha sikkerhetskopi.')) return;
-  DB = { version: 1, songs: [], setlists: [] };
-  saveDB();
-  renderSongs(); renderSetlists(); updateStats();
+  if(!confirm('Helt sikker?')) return;
+  DB = {version:1, songs:[], setlists:[]};
+  saveDB(); renderSongs(); renderSetlists(); updateStats();
 });
 
-/* ---------- GitHub sync ---------- */
-const GH_KEY = 'allsang_github_v1';
-let ghSettings = { owner:'', repo:'', branch:'main', path:'sangdatabase.json', token:'', autoSync:false };
-let ghSha = null;
-let ghSyncTimer = null;
-let ghBusy = false;
-
-function loadGhSettings(){
-  try{
-    const raw = localStorage.getItem(GH_KEY);
-    if(raw) Object.assign(ghSettings, JSON.parse(raw));
-  }catch(e){ console.error(e); }
-  document.getElementById('ghOwner').value    = ghSettings.owner || '';
-  document.getElementById('ghRepo').value     = ghSettings.repo  || '';
-  document.getElementById('ghBranch').value   = ghSettings.branch || 'main';
-  document.getElementById('ghPath').value     = ghSettings.path  || 'sangdatabase.json';
-  document.getElementById('ghToken').value    = ghSettings.token || '';
-  document.getElementById('ghAutoSync').checked = !!ghSettings.autoSync;
-}
-function saveGhSettings(){
-  ghSettings = {
-    owner:    document.getElementById('ghOwner').value.trim(),
-    repo:     document.getElementById('ghRepo').value.trim(),
-    branch:   document.getElementById('ghBranch').value.trim() || 'main',
-    path:     document.getElementById('ghPath').value.trim()   || 'sangdatabase.json',
-    token:    document.getElementById('ghToken').value.trim(),
-    autoSync: document.getElementById('ghAutoSync').checked
-  };
-  localStorage.setItem(GH_KEY, JSON.stringify(ghSettings));
-}
-function ghReady(){ return ghSettings.owner && ghSettings.repo && ghSettings.token; }
-function setGhStatus(msg, type){
-  const el = document.getElementById('ghStatus');
-  if(!el) return;
-  const colors = {ok:'var(--ok)', warn:'var(--warn)', err:'var(--danger)'};
-  el.style.color = colors[type] || 'var(--muted)';
-  el.textContent = msg;
-}
-function utf8ToB64(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = '';
-  for(let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-function b64ToUtf8(b64){
-  const bin = atob((b64||'').replace(/\s/g,''));
-  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  return new TextDecoder('utf-8').decode(bytes);
-}
-function ghContentUrl(withRef){
-  const base = `https://api.github.com/repos/${encodeURIComponent(ghSettings.owner)}/${encodeURIComponent(ghSettings.repo)}/contents/${ghSettings.path.split('/').map(encodeURIComponent).join('/')}`;
-  return withRef ? `${base}?ref=${encodeURIComponent(ghSettings.branch)}` : base;
-}
-function ghHeaders(){
-  return {
-    Authorization: `Bearer ${ghSettings.token}`,
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28'
-  };
-}
-
-async function ghPull(){
-  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
-  if(ghBusy) return;
-  ghBusy = true;
-  setGhStatus('Henter database fra GitHub…');
-  try{
-    const r = await fetch(ghContentUrl(true), { headers: ghHeaders() });
-    if(r.status === 404){
-      setGhStatus('Fila finnes ikke i repoet ennå – trykk «Lagre til GitHub» for å opprette.', 'warn');
-      ghSha = null; return;
-    }
-    if(r.status === 401 || r.status === 403){
-      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet har Contents: Read and write på dette repoet.`);
-    }
-    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
-    const data = await r.json();
-    const text = b64ToUtf8(data.content);
-    const parsed = JSON.parse(text);
-    if(!parsed.songs || !Array.isArray(parsed.songs)) throw new Error('JSON-fila mangler songs[]');
-    if(!parsed.setlists) parsed.setlists = [];
-    DB = parsed;
-    ghSha = data.sha;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
-    dirty = false;
-    renderSongs(); renderSetlists(); updateStats(); updateAutoSave();
-    setGhStatus(`✅ Hentet ${DB.songs.length} sanger og ${DB.setlists.length} set-lister fra GitHub`, 'ok');
-  }catch(err){
-    setGhStatus('❌ ' + err.message, 'err');
-    console.error(err);
-  } finally { ghBusy = false; }
-}
-
-async function ghPush(){
-  if(!ghReady()){ setGhStatus('Fyll inn brukernavn, repo og token først.', 'warn'); return; }
-  if(ghBusy){ scheduleGhPush(); return; }
-  ghBusy = true;
-  setGhStatus('Lagrer til GitHub…');
-  try{
-    // Hent SHA hvis vi ikke har en (fila eksisterer kanskje fra før)
-    if(!ghSha){
-      const ck = await fetch(ghContentUrl(true), { headers: ghHeaders() });
-      if(ck.ok){ ghSha = (await ck.json()).sha; }
-      else if(ck.status !== 404){
-        throw new Error(`Kunne ikke sjekke fila: HTTP ${ck.status}`);
-      }
-    }
-    const body = {
-      message: `Allsang: oppdatert sangdatabase (${DB.songs.length} sanger, ${DB.setlists.length} set-lister)`,
-      content: utf8ToB64(JSON.stringify(DB, null, 2)),
-      branch: ghSettings.branch
-    };
-    if(ghSha) body.sha = ghSha;
-    const r = await fetch(ghContentUrl(false), {
-      method: 'PUT',
-      headers: { ...ghHeaders(), 'Content-Type':'application/json' },
-      body: JSON.stringify(body)
-    });
-    if(r.status === 409 || r.status === 422){
-      // Konflikt: noen andre har endret fila i mellomtiden
-      ghSha = null;
-      throw new Error('Konflikt: fila ble endret eksternt. Trykk «Hent fra GitHub», sjekk endringene, og lagre på nytt.');
-    }
-    if(r.status === 401 || r.status === 403){
-      throw new Error(`Tilgang nektet (${r.status}). Sjekk at tokenet har Contents: Read and write.`);
-    }
-    if(!r.ok) throw new Error(`HTTP ${r.status}: ${(await r.text()).slice(0,200)}`);
-    const data = await r.json();
-    ghSha = data.content.sha;
-    dirty = false; updateAutoSave();
-    setGhStatus(`✅ Lagret til GitHub kl. ${new Date().toLocaleTimeString('no-NO')}`, 'ok');
-  }catch(err){
-    setGhStatus('❌ ' + err.message, 'err');
-    console.error(err);
-  } finally { ghBusy = false; }
-}
-
-function scheduleGhPush(){
-  if(!ghSettings.autoSync || !ghReady()) return;
-  clearTimeout(ghSyncTimer);
-  setGhStatus('✏️ Endring registrert – lagrer om 3 sekunder…');
-  ghSyncTimer = setTimeout(()=>{ ghPush(); }, 3000);
-}
-
-document.getElementById('btnGhSaveSettings').addEventListener('click', ()=>{
-  saveGhSettings();
-  setGhStatus('✅ Innstillinger lagret', 'ok');
-});
-document.getElementById('btnGhPull').addEventListener('click', ()=>{
-  saveGhSettings(); ghPull();
-});
-document.getElementById('btnGhPush').addEventListener('click', ()=>{
-  saveGhSettings(); ghPush();
-});
-// Lagre innstillinger automatisk ved endring av input-feltene (uten å trigge synk)
+/* ----- GitHub-knapper ----- */
+document.getElementById('btnGhTest').addEventListener('click', ghTest);
+document.getElementById('btnGhPull').addEventListener('click', ghPull);
+document.getElementById('btnGhPush').addEventListener('click', ghPush);
 ['ghOwner','ghRepo','ghBranch','ghPath','ghToken','ghAutoSync'].forEach(id=>{
-  document.getElementById(id).addEventListener('change', saveGhSettings);
+  document.getElementById(id).addEventListener('change', ()=>{ saveGhSettings(); });
 });
 
-/* ---------- Misc ---------- */
-function escapeHtml(s){
-  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* close modal on background click */
+/* ----- Modal-bakgrunnsklikk ----- */
 document.querySelectorAll('.modal-bg').forEach(bg=>{
   bg.addEventListener('click', e=>{ if(e.target===bg) bg.classList.remove('open'); });
 });
 
-/* ---------- Boot ---------- */
+/* ----- Boot ----- */
 loadDB();
 loadGhSettings();
 renderSongs();
 renderSetlists();
 updateStats();
-updateAutoSave();
-dirty = false; updateAutoSave();
-// Auto-pull fra GitHub ved oppstart hvis aktivert
+refreshSyncPill();
+renderBanner();
 if(ghSettings.autoSync && ghReady()){
   ghPull();
 }
