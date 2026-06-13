@@ -441,6 +441,15 @@
       "hasChords": true,
       "createdAt": "2026-05-31",
       "updatedAt": "2026-05-31"
+    },
+    {
+      "id": "id-7mhebg2gmqcbh5c3",
+      "artist": "Eagles",
+      "title": "Hotel California",
+      "lyrics": "",
+      "hasChords": false,
+      "createdAt": "2026-06-13",
+      "updatedAt": "2026-06-13"
     }
   ],
   "setlists": []
