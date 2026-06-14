@@ -479,5 +479,39 @@
       "updatedAt": "2026-06-14"
     }
   ],
-  "setlists": []
+  "setlists": [
+    {
+      "id": "id-qmy8mlwdmqdkhfqf",
+      "name": "Sankt Hans 2026",
+      "description": "",
+      "songIds": [
+        "id-65zrl24dmqdkgvke",
+        "id-f7in2aq4morc4mxk",
+        "id-j4bcu5nkmqdkbpg3",
+        "id-0x5w2ak1morbqmsx",
+        "id-u1icrj1gmorbulgr",
+        "id-l7t9pe4wmorb4s5m",
+        "id-7mhebg2gmqcbh5c3",
+        "id-xiz34juimorcpp3c",
+        "id-x94lkvytmorckscy",
+        "id-qb35ndimmorbmc29",
+        "id-ma2sfcjsmorbxxbx",
+        "id-0p4wen5gmorcep5f",
+        "id-tbhl7shwmorciwhg",
+        "id-4gtdeb45morcmjn7",
+        "id-clunmehamorcuu23",
+        "id-bmmaggxcmoquvxg7",
+        "id-j3q4sov2morbzot0",
+        "id-jvo3jyigmorc8hye",
+        "id-lg9arq3imorc2dwm",
+        "id-b3didl0qmqdk8ymr",
+        "id-ocuu4vifmpthob4k",
+        "id-kk04u032moqx07ym",
+        "id-lamzz0eqmorcbepx",
+        "id-ti6x84s8moqx4weh",
+        "id-4mdjcdiqmoqx2kdr"
+      ],
+      "createdAt": "2026-06-14"
+    }
+  ]
 }
